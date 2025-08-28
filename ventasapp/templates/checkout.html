@@ -1,0 +1,24 @@
+<h2>Revisa tu pedido y selecciona extras</h2>
+<form method="POST">
+  {% csrf_token %}
+  {% for item in cart.items.all %}
+    <div>
+      <h3>{{ item.producto.name }} x{{ item.cantidad }}</h3>
+      <p>Precio base: ${{ item.producto.price }}</p>
+
+      {% if item.producto.extras.all %}
+        <h4>Extras disponibles:</h4>
+        {% for extra in item.producto.extras.all %}
+          <label>
+            <input type="checkbox" name="extras_{{ item.id }}" value="{{ extra.id }}"
+              {% if extra in item.extras.all %}checked{% endif %}>
+            {{ extra.nombre }} (+${{ extra.precio }})
+          </label><br>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <hr>
+  {% endfor %}
+
+  <button type="submit">Siguiente Paso</button>
+</form>

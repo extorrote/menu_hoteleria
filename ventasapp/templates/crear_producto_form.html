@@ -1,0 +1,45 @@
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Producto</title>
+    <link rel="stylesheet" href="{% static 'css/estilos_crear_negocio.css' %}">
+    <link rel="stylesheet" href="{% static 'css/headers.css' %}">
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            
+            <legend>Crear producto para {{business}} </legend>
+           
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit">Guardar Producto</button>
+    </form>
+
+    <a class="boton-regresar" href="{% url 'dashboard' %}">Volver</a>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+{%if business.tipos_de_negocio == 'restaurantes_formales' or business.tipos_de_negocio == 'comida_rapida' or business.tipos_de_negocio == 'fondas_locales' or   business.tipos_de_negocio == 'cafeterias' or   business.tipos_de_negocio == 'panaderias_reposterias' or   business.tipos_de_negocio == 'food_trucks' or   business.tipos_de_negocio == 'tiendas_helados_postres' or   business.tipos_de_negocio == 'tiendas_saludables' or   business.tipos_de_negocio == 'comida_vegana' %}
+
+<!-- Meta SEO dinámico para el menú del negocio -->
+<title>Menú de {{ business.commercial_name }} | Obten precios más bajos Comprando directamente aqui.</title>
+<meta name="description" content="Explora el menú de {{ business.commercial_name }} en Sabor Local. Productos con precios bajos porque aquí los negocios pagan menos comisiones.">
+<meta name="keywords" content="menú {{ business.commercial_name }}, productos {{ business.commercial_name }}, comida económica, comprar directo, comercio justo, negocios locales, precios bajos, Sabor Local, entrega a domicilio">
+<meta name="author" content="{{ business.commercial_name }} en Sabor Local">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Menú de {{ business.commercial_name }} | Sabor Local | Compra directo y ahorra hasta un 40%">
+<meta property="og:description" content="Descubre lo que ofrece {{ business.commercial_name }} en Sabor Local, menos comisiones = precios mas bajos.">
+<meta property="og:url" content="https://saborlocalpv.com{% url 'menu' business.id %}">
+ {% if producto.image1 %}
+<meta property="og:image" content="https://saborlocalpv.com{{ producto.image1.url }}">
+{%else%}
+<meta property="og:image" content="{{ business.image1.url }}">
+{%endif%}
+
+<link rel="apple-touch-icon" href="{%static 'images/apple-touch-icon.png'%}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SaborLocal">
+<meta name="application-name" content="Sabor Local">{#andoid#}
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<meta property="og:site_name" content="Sabor Local">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Menú de {{ business.commercial_name }} | Sabor Local">
+<meta name="twitter:description" content="Revisa el menú completo de {{ business.commercial_name }}. Compra directo con precios bajos y sin intermediarios.">
+<meta name="twitter:image" content="https://saborlocalpv.com{{ business.image1.url }}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com{% url 'menu' business.id %}">
+
+{%elif business.tipos_de_negocio == 'licorerias' or business.tipos_de_negocio == 'tiendas_locales_de_abarrotes' or business.tipos_de_negocio == 'medicamentos' or business.tipos_de_negocio == 'tiendas_de_flores' or business.tipos_de_negocio == 'tiendas_de_regalos' %}
+
+<!-- Meta SEO dinámico para el menú del negocio -->
+<title>Productos de {{ business.commercial_name }} | Obten precios más bajos Comprando directamente aqui.</title>
+<meta name="description" content="Explora los productos de {{ business.commercial_name }} en Sabor Local. Productos con precios bajos porque aquí los negocios pagan menos comisiones.">
+<meta name="keywords" content="productos {{ business.commercial_name }}, productos {{ business.commercial_name }}, comida económica, comprar directo, comercio justo, negocios locales, precios bajos, entrega a domicilio">
+<meta name="author" content="{{ business.commercial_name }} en Sabor Local">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Productos de {{ business.commercial_name }} | Compra directo y ahorra hasta un 40%">
+<meta property="og:description" content="Descubre lo que ofrece {{ business.commercial_name }}, menos comisiones = precios mas bajos.">
+<meta property="og:url" content="https://saborlocalpv.com{% url 'menu' business.id %}">
+ {% if producto.image1 %}
+<meta property="og:image" content="https://saborlocalpv.com{{ producto.image1.url }}">
+{%else%}
+<meta property="og:image" content="{{ business.image1.url }}">
+{%endif%}
+
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<meta property="og:site_name" content="Sabor Local">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Productos de {{ business.commercial_name }} ">
+<meta name="twitter:description" content="Revisa el menú completo de {{ business.commercial_name }}. Compra directo con precios bajos y sin intermediarios.">
+<meta name="twitter:image" content="https://saborlocalpv.com{{ business.image1.url }}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com{% url 'menu' business.id %}">
+
+{%endif%}
+
+{##################### FIN META TAGS  ######################}
+
+
+  <link rel="stylesheet" href="{% static 'css/dashboard2.css' %}">
+  <link rel="stylesheet" href="{% static '/css/headers.css' %}">
+  <link rel="stylesheet" href="{% static '/css/swiper_productos.css' %}">
+  <link rel="stylesheet" href="{% static '/css/footers.css' %}">
+  
+  <link rel="stylesheet" href="{%static 'fuentes/fuentes.css'%}"><!--ESTO ES PARA CARGAR FUENTES NUEVAS-->
+
+ <!-- ESTO ES PARA PASAR LAS FOTOS  -->
+ <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+ <!-- ESTO ES PARA PASAR LAS FOTOS TAMBIEN , aparte de esto en static tengo un achivo js -->
+ <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+ {# TAMBIEN DEBI AGREGAR 2 LINEAS DE JS MAS por donde estan LOS DIV DDEL PARA EL NEXT Y PREV #}
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+  
+
+
+</header>
+
+{# ####################### BOTON REGRESAR FIXED   ###############################################}
+<a class="ver_carrito_fixed boton_regresar_fixed"href="{% url 'tienda' %}"><svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="30px" fill="#ffffff"><path d="m287-446.67 240 240L480-160 160-480l320-320 47 46.67-240 240h513v66.66H287Z"/></svg></a>
+
+
+{# BOTON CARRITO FIXED#}
+{%if items_carrito %}
+<div class="ver_carrito_fixed">
+<a  href="{% url 'ver_carrito' %}"><img src="{%static 'images/bolsa.png' %}"> <h3>{{items_carrito}}<sup>*</sup></h3></a> 
+</div>
+{%endif%}
+
+
+{#BUSCADOR EN TIEMPO REAL , NO NECESITÉ UNA VIEW PARA ESTO, simplemente lo hice con la clase del titulo ###############}
+
+<div class="input-wrapper buscador_tienda">
+  <input type="text" id="buscador" class="typing-input" placeholder=" " autocomplete="off">
+  <label for="buscador" class="typing-label">Buscar Productos...</label>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("buscador");
+
+    // Buscador en tiempo real
+    input.addEventListener("input", function () {
+      const filtro = input.value.toLowerCase();
+      const productos = document.querySelectorAll(".product");
+
+      productos.forEach(function (producto) {
+        const titulo = producto.querySelector(".title").textContent.toLowerCase();
+        producto.style.display = titulo.includes(filtro) ? "" : "none";
+      });
+
+      document.querySelectorAll(".category-section").forEach(function (section) {
+        const visibles = section.querySelectorAll(".product:not([style*='display: none'])");
+        section.style.display = visibles.length > 0 ? "" : "none";
+      });
+    });
+  });
+</script>
+{############################# FIN DE BUSCADOR ###########################################}
+{%if productos %}
+<h1> {%if business.tipos_de_negocio == 'restaurantes_formales' or business.tipos_de_negocio == 'comida_rapida' or business.tipos_de_negocio == 'fondas_locales' or   business.tipos_de_negocio == 'cafeterias' or   business.tipos_de_negocio == 'panaderias_reposterias' or   business.tipos_de_negocio == 'food_trucks' or   business.tipos_de_negocio == 'tiendas_helados_postres' or   business.tipos_de_negocio == 'tiendas_saludables' or   business.tipos_de_negocio == 'comida_vegana' %}MENÚ {%elif business.tipos_de_negocio == 'licorerias' or business.tipos_de_negocio == 'tiendas_locales_de_abarrotes' or business.tipos_de_negocio == 'medicamentos' or business.tipos_de_negocio == 'tiendas_de_flores' or business.tipos_de_negocio == 'tiendas_de_regalos' %} PRODUCTOS {%endif%}DE {{business.commercial_name}}</h1>
+<div class="body">
+
+
+
+{% for producto in productos %}
+  <li class="product">
+  <h3 class="title">{{ producto.name }}</h3>
+ 
+  <!-- Product Images Swiper -->
+  <div class="swiper swiper-container mySwiper-{{ producto.id }}">
+    {% if not producto.disponible_para_pedido %}
+        <div class="producto_agotado">PRODUCTO AGOTADO <h6>Regresara pronto.</div>
+        
+      {% endif %}
+    <div class="swiper-wrapper">
+      {% if producto.image1 %}
+        <div class="swiper-slide">
+          <img src="{{ producto.image1.url }}" onclick="openLightbox('{{ producto.image1.url }}', this)">
+        </div>
+      {% endif %}
+        
+        
+      {% if producto.image2 %}
+        <div class="swiper-slide">
+          <img src="{{ producto.image2.url }}" onclick="openLightbox('{{ producto.image2.url }}', this)">
+        </div>
+      {% endif %}
+      {% if producto.image3 %}
+        <div class="swiper-slide">
+          <img src="{{ producto.image3.url }}" onclick="openLightbox('{{ producto.image3.url }}', this)">
+        </div>
+      {% endif %}
+      {% if producto.image4 %}
+        <div class="swiper-slide">
+          <img src="{{ producto.image4.url }}" onclick="openLightbox('{{ producto.image4.url }}', this)">
+        </div>
+      {% endif %}
+      {% if producto.image5 %}
+        <div class="swiper-slide">
+          <img src="{{ producto.image5.url }}" onclick="openLightbox('{{ producto.image5.url }}', this)">
+        </div>
+      {% endif %}
+    </div>
+
+
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+    <div class="precio-fuera-details">Precio $ {{ producto.price }}</div>
+    <details class="product-details">
+        <summary class="descripcion-menu-item">{#Detalles de Producto  ESTE TEXTO SE LO PUSE CON CSS #}</summary>
+        {%if producto.ingredientes %}
+        <div class="ingredientes">
+           <em>ingredientes: </em>
+          <p>{{producto.ingredientes}}</p>
+        </div>
+        {%endif%}
+
+        {%if producto.description%}
+        <div class="product-description">
+          <em>Descripción:</em>
+          <p>{{ producto.description }}</p>
+        </div>
+        {%endif%}
+      </details>
+
+      {% if user.userprofile.role == 'business_owner' %}
+      <div class="botones-reservar carrito">
+        <a href="{% url 'editar_producto_menu' producto.id %}">editar</a>
+        <a style="background-color:red" class="view-details" href="{% url 'eliminar_producto_menu' producto_id=producto.id %}">
+          Eliminar
+        </a>
+        <a href="{% url 'agregar_extra' producto.id %}" >+ Extra</a>
+      </div>
+      {% else %}
+      <!-- Usuario normal: agregar producto al carrito sin extras -->
+       
+{###########################################################################################################}
+
+      <form method="POST" action="{% url 'add_to_cart' producto.id %}" class="add-to-cart-form" data-business-id="{{ producto.business.id }}">
+  {% csrf_token %}
+  
+
+    <!-- Selector de cantidad -->
+    <div class="number-input">
+      <button type="button" class="minus">−</button>
+      <input type="number" name="cantidad" class="cantidad-input" min="1" value="1">
+      <button type="button" class="plus">+</button>
+    </div>
+
+    <div class="nota-producto">
+        <fieldset>
+                <legend>¿Notas para esta Orden?</legend>
+                  <textarea name="nota" rows="2" cols="25" placeholder=""></textarea>
+                  </fieldset>
+    </div>
+    <!-- Extras si existen -->
+    {% if producto.extras.all %}
+      <details class="details_extras_tienda">
+        <summary> <!-- EL TEXTO DE ESTO LO AGREGUE CON CSS --> </summary>
+        {% for extra in producto.extras.all %}
+        <label class="extras_label_y_precio">{{ extra.nombre }} (+${{ extra.precio }})</label>
+        <div class="extras_grid number-input" data-extra-id="{{ extra.id }}">
+          
+          <button type="button" class="minus">−</button>
+          <input type="number" name="extra_{{ extra.id }}" class="cantidad-extra-input" min="0" value="0">
+          <button type="button" class="plus">+</button>
+        </div>
+        {% endfor %}
+      </details>
+    {% endif %}
+
+    <!-- Botón de agregar -->
+    {% if producto.disponible_para_pedido %}
+    <button class="boton_agregar_carrito" type="submit">Agregar al Carrito</button>
+    {%else%}
+    <button class="boton_agregar_carrito" disabled style="opacity: 0.5; cursor: not-allowed;" type="submit">Agregar al Carrito</button>
+    {%endif%}
+  <span class="mensaje-error"></span>
+</form>
+
+
+
+      {% endif %}
+  </li>
+{% endfor %}
+
+
+
+
+<!-- Lightbox & Swiper Scripts -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="">
+    <span class="close" onclick="closeLightbox()">✖</span>
+    <span class="prev" onclick="changeLightbox(-1, event)">&#10094;</span>
+    <span class="next" onclick="changeLightbox(1, event)">&#10095;</span>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="{% static '/js/swipers.js' %}"></script>
+{#############################################################################################33#}
+
+</div> <!-- Close body -->
+<!-- Buttons -->
+<div class="botones-reservar carrito">
+  {% if user.is_authenticated%}
+  <a href="{% url 'dashboard' %}">Regresar</a>
+  {%else%}
+  <a href="{% url 'tienda' %}">Regresar</a>
+  {%endif%}
+
+   <a href="{% url 'ver_carrito' %}">Ver Carrito</a>
+</div>
+{%else%}
+<div class="menu_bacio"> Este Negocio aún no tiene un Menú</div>
+
+<div class="botones-reservar carrito">
+<a href="{% url 'tienda' %}">Regresar</a>
+</div>
+{%endif%}
+
+
+{#  CODIGO PARA QUE SI EL USUARIO INTENTA AGREGAR ITEMS DE OTRO NEGOCIO LE DIGA QUE NO PUEDE AGREGAR HASTA QUE NO PAGUE EL OTRO CARRITO , TAMBIEN DEBI PONER OTRO CODIGO JS PEQUEÑO EN EL CARRITO PARA QUE LIMPIE STORAGE SI SE ELIMINAN TODO LOS PRODUCTOS#}
+{############################# PARA ESTO DEBI TAMBIEN DEBI AGREGAR CONDICIONALE EN LA VISTA AGREGAR AL CARRITO#}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const forms = document.querySelectorAll(".add-to-cart-form");
+  //AQUI ESTOY PREVIINIENDO DEFAULT PARA QUE CUANDO EL USUARIO DE CLICK NO SE HAGA LO QUE POR DEFAULT SE HACE
+  forms.forEach(form => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const currentBusinessId = form.dataset.businessId;
+      const storedBusinessId = localStorage.getItem("carrito_business_id");//AQUI ESTOY GUARDANDO EN LOCALSTORAGE EL ID DEL PRODUCTO
+      const mensajeError = form.querySelector(".mensaje-error");//CREAMOS LA CLASE PARA EL MENSAJE DE ERROR
+      const boton = form.querySelector("button[type='submit']");//SELECCIONAMOS EL BOTON DEL FORM
+
+      mensajeError.textContent = ""; //EL TEXTO DEL MENSAJE DE ERROR
+      mensajeError.classList.remove("mensaje-exito", "mensaje-error");//BOTTAMOS MENSAJE DE ERROR Y DE EXITO
+      boton.disabled = true;//DESABILITAMOS EL BOTON
+
+      if (storedBusinessId && storedBusinessId !== currentBusinessId) {//AQUI COMPRUEBO SI EL NEGOCIO EXISTE EN EL CARRO
+        mensajeError.textContent = "Finaliza la compra actual antes de agregar productos de otro negocio.";
+        mensajeError.classList.add("mensaje-error");
+        boton.disabled = false;//DESABILITO EL NEGOCIO BOTON
+
+        setTimeout(() => {//AQUI ESTOY PONIENDO UN TIMER PARA QUE EL MENSAJE DESAPAREZCA DESPUES DE 3 SEGUNDOS
+          mensajeError.textContent = "";
+          mensajeError.classList.remove("mensaje-error");
+        }, 3000);
+
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": formData.get('csrfmiddlewaretoken'),
+        },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          mensajeError.textContent = "Agregado ✅";
+          mensajeError.classList.add("mensaje-exito");
+          if (!storedBusinessId) {
+            localStorage.setItem("carrito_business_id", currentBusinessId);
+          }
+
+          // ⏳ ESPERAMOS 3 SEGUNDOS ANTES DE RECARGAR
+          setTimeout(() => {
+            // 🧹 LIMPIAMOS NOTA
+            const notaInput = form.querySelector("textarea[name='nota']");
+            if (notaInput) notaInput.value = "";
+
+            // 🧹 LIMPIAMOS EXTRAS
+            const extraInputs = form.querySelectorAll("input[name^='extra_']");
+            extraInputs.forEach(input => input.value = "0");
+
+            // 🧹 LIMPIAMOS CANTIDAD PRINCIPAL
+            const cantidadInput = form.querySelector("input[name='cantidad']");
+            if (cantidadInput) cantidadInput.value = "1";
+
+            // 💾 GUARDAMOS LA POSICIÓN DEL SCROLL Y RECARGAMOS
+            localStorage.setItem("scrollPos", window.scrollY);
+            location.reload();
+          }, 3000);
+        } else {
+          mensajeError.textContent = data.message;
+          mensajeError.classList.add("mensaje-error");
+        }
+
+        setTimeout(() => {
+          mensajeError.textContent = "";
+          mensajeError.classList.remove("mensaje-exito", "mensaje-error");
+        }, 2000);
+
+        boton.disabled = false;
+      })
+      .catch(() => {
+        mensajeError.textContent = "Error inesperado, intenta de nuevo.";
+        mensajeError.classList.add("mensaje-error");
+        boton.disabled = false;
+
+        setTimeout(() => {
+          mensajeError.textContent = "";
+          mensajeError.classList.remove("mensaje-error");
+        }, 2000);
+      });
+    });
+  });
+});
+</script>
+
+
+{# JS para actualizar cantidades, extras y nota automáticamente #}
+<script> 
+document.addEventListener("DOMContentLoaded", function() {
+  // Escucha cambios en inputs y textarea
+  document.querySelectorAll("input[type='number'], textarea").forEach(function(input) {
+    input.addEventListener("change", function() {
+      actualizarCarritoDesdeInput(input);
+    });
+  });
+
+  // Funcionalidad para botones + y - del producto principal
+  document.querySelectorAll(".number-input:not([data-extra-id])").forEach(function(container) {
+    const minusBtn = container.querySelector(".minus");
+    const plusBtn = container.querySelector(".plus");
+    const input = container.querySelector(".cantidad-input");
+    const itemId = container.getAttribute("data-item-id");
+
+    if (minusBtn && plusBtn && input) {
+      minusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value);
+        if (current > 1) {
+          input.value = current - 1;
+          actualizarCarritoDesdeInput(input);
+        }
+      });
+
+      plusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value);
+        input.value = current + 1;
+        actualizarCarritoDesdeInput(input);
+      });
+    }
+  });
+
+  // Funcionalidad para botones + y - de EXTRAS
+  document.querySelectorAll(".number-input[data-extra-id]").forEach(function(container) {
+    const minusBtn = container.querySelector(".minus");
+    const plusBtn = container.querySelector(".plus");
+    const input = container.querySelector(".cantidad-extra-input");
+    const itemId = container.getAttribute("data-item-id");
+
+    if (minusBtn && plusBtn && input) {
+      minusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value) || 0;
+        if (current > 0) {
+          input.value = current - 1;
+          input.dispatchEvent(new Event("change"));  // Usa misma lógica
+        }
+      });
+
+      plusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value) || 0;
+        input.value = current + 1;
+        input.dispatchEvent(new Event("change"));  // Usa misma lógica
+      });
+    }
+  });
+
+  function actualizarCarritoDesdeInput(input) {
+    const inputName = input.name;
+    const parts = inputName.split("_");
+    const itemId = parts[1];
+
+    let cantidadProducto = document.querySelector(`input[name='cantidad_${itemId}']`)?.value || 1;
+    let nota = document.querySelector(`textarea[name='nota_${itemId}']`)?.value || "";
+
+    let extras = {};
+    document.querySelectorAll(`input[name^='extra_${itemId}_']`).forEach(function(extraInput) {
+      const extraId = extraInput.name.split("_")[2];
+      extras[extraId] = extraInput.value;
+    });
+
+    fetch("{% url 'actualizar_carrito_ajax' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        cantidad: cantidadProducto,
+        extras: extras,
+        nota: nota
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        console.log("Carrito actualizado");
+        const totalElement = document.querySelector(".total_general");
+        if (totalElement) {
+          totalElement.textContent = "Total: $" + data.total_general;
+        }
+      } else {
+        console.error(data.message);
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  }
+});
+</script>
+
+
+
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+
+{# ESTO LO AGREGUE PARA QUE NO QUEDE EN local storage LOS ITEMS ELIMINADOS, PORQUE NO ME ESTABAN DEJANDO GUARDAR ITEMS DE OTRO NEGOCIO SIN ESTO #}
+{######### APARTE DE ESTE SCRIPT DEBO AGREGARLE AL BOTON ELIMINAR  data-eliminar-item  PARA QUE CUANDO SE ELIMINE SE ACTUALICE EL localstorage #}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('[data-eliminar-item]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      // Detecta si solo hay un producto en el carrito antes de eliminarlo
+      const itemsEnCarrito = document.querySelectorAll("[data-eliminar-item]");
+      if (itemsEnCarrito.length === 1) {
+        localStorage.removeItem("carrito_business_id");
+        console.log("Último ítem eliminado. LocalStorage limpiado.");
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+    
+    @keyframes flip {
+  from {
+    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);
+    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, -360deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  40% {
+    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -190deg);
+    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -190deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  50% {
+    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -170deg);
+    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 150px)
+      rotate3d(0, 1, 0, -170deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+
+  80% {
+    -webkit-transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)
+      rotate3d(0, 1, 0, 0deg);
+    transform: perspective(400px) scale3d(0.95, 0.95, 0.95) translate3d(0, 0, 0)
+      rotate3d(0, 1, 0, 0deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+
+  to {
+    -webkit-transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);
+    transform: perspective(400px) scale3d(1, 1, 1) translate3d(0, 0, 0) rotate3d(0, 1, 0, 0deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+}
+
+
+    /* Base Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+      border-left: 6px solid #b4975a;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: #00471b;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    form p {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+     
+      color: #00471b;
+    }
+
+    input, select, textarea {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #b4975a;
+      outline: none;
+    }
+
+    button {
+      background-color: #b4975a;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #a08047;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: #00471b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: #b4975a;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+      }
+
+      .container {
+        padding: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+/* ######################## ESTO ES ESPECIALMENTE PARA EL FORMULARIO DE ENVIO DE PRODUCTOS */
+
+.calle_y_numero,#direccion-success{
+  
+  
+  margin: auto;
+  justify-content: center !important;
+  align-items: center !important;
+}
+@media screen and (max-width:768px){
+.h2_envios{
+  font-size: 17px;
+  text-align: center;
+}
+}
+
+    .grid_datos_envio{
+      width:100%;
+      display:grid;
+
+      grid-template-columns: repeat(2,1fr);
+      justify-content: center;
+      align-items: center;
+      gap:5px;
+    }
+
+    .grid_datos_envio p{
+      
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    .grid_datos_envio  input{
+  
+      max-width:300px !important;
+      width:100%;
+    }
+    #propina-container strong{
+          color:#00471b;
+    }
+    .propina{
+      width:100%;
+      display:flex;
+      margin:auto;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+
+
+    
+ 
+
+
+    .propina input[type="checkbox"]{
+          width:20px;
+          height: 20px;
+          cursor:pointer;
+          border-color: #00471b;
+          border-width: 4px;
+           animation:flip  8s 1s ease-in-out;
+    }
+
+
+    .textfield textarea{
+      
+      width:100%;
+      height:60px;
+    }

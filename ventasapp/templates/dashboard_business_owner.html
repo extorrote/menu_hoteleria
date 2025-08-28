@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Meta SEO para dashboard del propietario -->
+<title>Panel de Negocios | Administra tu negocio y productos en Sabor Local</title>
+<meta name="description" content="Administra tu negocio y productos fácilmente desde tu panel de control en Sabor Local. Publica nuevos productos, edita tu negocio y recibe pedidos directo de tus clientes.">
+<meta name="keywords" content="dashboard, negocios locales, administrar negocio, administrar productos, panel de control, Sabor Local, vender en línea, pedidos locales, comercio justo, crear negocio, vender productos, Sabor Local Puerto Vallarta">
+<meta name="author" content="{{ profile.user.get_full_name|default:profile.user.username }}">
+<meta name="robots" content="noindex, nofollow"> <!-- No indexar contenido privado -->
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Panel de Negocios | Administra tu negocio y productos">
+<meta property="og:description" content="Desde este panel, gestiona tu negocio, publica productos y revisa tus pedidos. Plataforma fácil y directa para negocios locales.">
+<meta property="og:url" content="https://saborlocalpv.com/dashboard/">
+<meta property="og:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta property="og:site_name" content="Sabor Local PV">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tu panel de negocios en Sabor Local">
+<meta name="twitter:description" content="Administra tu negocio y productos desde un solo lugar. Simple, directo y sin comisiones abusivas.">
+<meta name="twitter:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Favicon -->
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com/dashboard/">
+{################# FIN META TAGS ##################################}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/dashboard_business_y_details.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/swipers.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css'%}">
+    <link rel="stylesheet" href="{%static '/fuentes/fuentes.css'%}"><!--ESTO ES PARA CARGAR FUENTES NUEVAS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/><!--ESTE ES EL QUE HACE QUE LAS FOTOS ESTEN DENTRO DEL SWIPER-->
+
+    
+</head>
+<header>
+    <div class="logo">
+        <img src="{% static '/images/logo.png' %}" alt="Logo">
+    </div>
+</header>
+<body>
+
+<div class="body">
+
+    
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+
+{% block content %}
+<h2>Bienvenido, {{ profile.user.first_name }} ({{ profile.user.username }})</h2>
+    
+<div class="menu-categorias">
+<a class="botones-categorias" href="{% url 'view_profile' %}">Mi Perfil <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M480-240Zm-320 80v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q37 0 73 4.5t72 14.5l-67 68q-20-3-39-5t-39-2q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32h240v80H160Zm400 40v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-340L683-120H560Zm300-263-37-37 37 37ZM620-180h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19ZM480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Z"/></svg></a>
+<a class="botones-categorias" href="{% url 'create_business' %}">Crear Nuevo Negocio</a>
+
+
+
+
+
+{%if   user.userprofile.stripe_secret_key %}
+<a class="botones-categorias" target="_blank"  href="https://dashboard.stripe.com/dashboard" >Ver Transacciones</a>
+{%endif%}
+
+<a class="botones-categorias" href="{% url 'codigo_qr' %}">Generar QR</a>
+<a class="botones-categorias" href="{% url 'logout' %}">Cerrar Sesión</a>
+</div>    
+
+
+{% if businesses %}
+  <ul>
+    {% for business in businesses %}
+      <li>
+        <strong class="title">{{ business.commercial_name }} </strong>
+       
+        {% if business.is_open_now %}
+        {%comment%}
+        <span class="abierto">Abierto<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+        {%endcomment%}
+        {% else %}
+            <span class="cerrado">Cerrado<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+        {% endif %}
+
+        <!-- SWIPER -->
+        <div class="swiper mySwiper-{{ business.id }}">
+    <div class="swiper-wrapper business-gallery">
+        {% if business.image1 %}
+            <div class="swiper-slide">
+                <img src="{{ business.image1.url }}" alt="Image 1" onclick="openLightbox(this)">
+            </div>
+        {% endif %}
+        {% if business.image2 %}
+            <div class="swiper-slide">
+                <img src="{{ business.image2.url }}" alt="Image 2" onclick="openLightbox(this)">
+            </div>
+        {% endif %}
+        {% if business.image3 %}
+            <div class="swiper-slide">
+                <img src="{{ business.image3.url }}" alt="Image 3" onclick="openLightbox(this)">
+            </div>
+        {% endif %}
+        {% if business.image4 %}
+            <div class="swiper-slide">
+                <img src="{{ business.image4.url }}" alt="Image 4" onclick="openLightbox(this)">
+            </div>
+        {% endif %}
+        
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+
+        
+         <a class="ver_detalles_business_owner" href="{% url 'business_detail' business.id %}">Detalles Negocio</a> 
+        </li>
+
+        <div class="botones-reservar">
+            
+            
+           
+                
+            
+
+          
+                <!--ESTE ES EL BOTON DE LOS PRODUCTOS EN GENERAL-->
+            <a class="btn btn-primary" href="{% url 'agregar_producto' business.id %}">+ Producto</a>
+            
+
+            
+            
+         
+            <a href="{% url 'menu' business_id=business.id %}">Productos</a> {%comment%} ESTE ES EL DE PRODUCTOS GENERALES{%endcomment%}
+
+       
+            
+            {%comment%}✏️🗑️ #{%endcomment%}
+      
+            <a href="{% url 'edit_business' business.id %}">Editar {{ business.name }}</a>
+
+
+        {#<a href="{% url 'eliminar_extra' extra.id %}" onclick="return confirm('¿Estás seguro de que deseas eliminar este extra?');">Eliminar</a>#}
+
+
+            <a href="{% url 'delete_business' business.id %}">Eliminar</a>
+            <a href="{% url 'ver_pedidos_por_negocio' business.id %}" class="btn btn-secondary">📦 Ver Pedidos</a>
+
+        </div>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aún no se ha agregado ningún negocio.</p>
+{% endif %}
+{% endblock %}
+
+</div> <!-- ##################### CIERRA DIV BODY -->
+
+<!-- ESTOS SON PARTE DEL SWIPER Y OPEN MODAL JUNTO CON : <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> QUE SE PONE EN HEAD -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="">
+    <span class="close" onclick="closeLightbox()">✖</span>
+    <span class="prev" onclick="changeLightbox(-1, event)">&#10094;</span>
+    <span class="next" onclick="changeLightbox(1, event)">&#10095;</span>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!--ESTE ES PARA PASAR LAS FOTOS ANTES DE ABRIR EL MODAL-->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const swipers = document.querySelectorAll('.swiper');
+    const botonnext = document.querySelector('.swiper-button-next');
+    const botonprev = document.querySelector('.swiper-button-prev');
+    if (botonnext && botonprev) {
+        botonnext.style.color = "transparent";
+        botonprev.style.color = "transparent";
+    }
+
+    swipers.forEach((swiperEl) => {
+        new Swiper(swiperEl, {
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+        });
+    });
+});
+
+let lightbox = document.getElementById("lightbox");
+let lightboxImg = document.getElementById("lightbox-img");
+let images = [];
+let currentIndex = 0;
+
+
+function openLightbox(imgElement) {
+    const container = imgElement.closest('.business-gallery');
+    images = Array.from(container.querySelectorAll("img")).map(img => img.src);
+    currentIndex = images.indexOf(imgElement.src);
+    lightboxImg.src = imgElement.src;
+    lightbox.style.display = "flex";
+}
+
+function closeLightbox() {
+    lightbox.style.display = "none";
+}
+
+function changeLightbox(direction, event) {
+    event.stopPropagation();
+    currentIndex = (currentIndex + direction + images.length) % images.length;
+    lightboxImg.src = images[currentIndex];
+}
+</script>
+
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+
+
+</body>
+</html>

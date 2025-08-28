@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% if role == "business_owner" %}
+  <title>Regístrate como Propietario de Negocio | Sabor Local</title>
+  <meta name="description" content="Crea tu cuenta como propietario de negocio en Sabor Local. Publica tus productos, recibe pedidos y haz crecer tu negocio en Puerto Vallarta.">
+  <meta property="og:title" content="Regístrate como Propietario de Negocio">
+  <meta property="og:description" content="Publica tu negocio, administra productos y recibe pedidos con Sabor Local. ¡Regístrate gratis!">
+  <meta name="twitter:title" content="Regístrate como Propietario de Negocio">
+  <meta name="twitter:description" content="Comienza a vender en Sabor Local. Registra tu negocio hoy.">
+{% else %}
+  <title>Regístrate como Conductor | Sabor Local</title>
+  <meta name="description" content="Únete como conductor a Sabor Local. Gana dinero entregando pedidos de negocios locales en tu ciudad.">
+  <meta property="og:title" content="Regístrate como Conductor">
+  <meta property="og:description" content="Conduce, entrega y gana con Sabor Local. Regístrate como repartidor local.">
+  <meta name="twitter:title" content="Regístrate como Conductor">
+  <meta name="twitter:description" content="Gana dinero entregando pedidos en tu ciudad. Únete como conductor en Sabor Local.">
+{% endif %}
+
+<meta name="keywords" content="registro, crear cuenta, repartidor, negocio local, dueño de negocio, conductor, plataforma local, Sabor Local">
+<meta name="author" content="Sabor Local">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://saborlocalpv.com{% if role == 'business_owner' %}/register/business_owner/{% else %}/register/conductor/{% endif %}">
+<meta property="og:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta property="og:site_name" content="Sabor Local PV">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Favicon -->
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://saborlocalpv.com{% if role == 'business_owner' %}/register/business_owner/{% else %}/register/conductor/{% endif %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static '/css/registrarse.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css'%}">
+</head>
+    <header>
+    <div class="logo">
+        <img src="{%static '/images/logo.png'%}">
+    </div>
+</header>
+<body>
+
+<div class="body">
+ {%if role == "business_owner" %}
+<h2> Registrarse como propietario de negocio.</h2>
+{%else%}
+<h2> Registrarse como Conductor.</h2>
+{%endif%}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <!--<h3>Información de la Cuenta</h3>-->
+  {{ user_form.as_p }}
+
+ 
+  {{ profile_form.as_p }}
+
+  <button type="submit">Registrarse</button>
+</form>
+<p><a href="{% url 'index' %}" class="back-btn">Regresar</a></p>
+</div><!-- ############### CIERRE DIV BODY##############-->
+</body>
+</html>

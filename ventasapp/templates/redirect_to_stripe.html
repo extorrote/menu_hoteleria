@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirigiendo a Stripe...</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <p>Redirigiéndote a Stripe para completar el pago...</p>
+
+  <script>
+    const sessionId = "{{ session_id|escapejs }}";
+
+    if (!sessionId || sessionId === "None") {
+      document.body.innerHTML = "<p style='color:red;'>Error: No se pudo generar sesión de pago. Intenta más tarde.</p>";
+    } else {
+      const stripe = Stripe("{{ stripe_public_key }}");
+      stripe.redirectToCheckout({ sessionId: sessionId }).then(function (result) {
+        if (result.error) {
+          document.body.innerHTML = "<p style='color:red;'>Error: " + result.error.message + "</p>";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

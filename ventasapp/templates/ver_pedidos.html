@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Meta básicos -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pedidos de {{ business.commercial_name }} | Sabor Local</title>
+<meta name="description" content="Administra y visualiza los pedidos pendientes y enviados de {{ business.commercial_name }} desde tu panel en Sabor Local.">
+
+<!-- Favicon -->
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon" />
+
+<!-- Meta Open Graph para compartir -->
+<meta property="og:title" content="Pedidos de {{ business.commercial_name }} | Sabor Local">
+<meta property="og:description" content="Accede al panel para revisar, filtrar y gestionar los pedidos de {{ business.commercial_name }}.">
+<meta property="og:image" content="{% static 'images/logo.png' %}">
+<meta property="og:url" content="https://saborlocal.mx/pedidos">
+<meta property="og:type" content="website">
+
+{# FIN META TAGS#}
+
+  <link rel="stylesheet" href="{% static 'css/ver_pedidos.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'fuentes/fuentes.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static '/css/headers.css' %}">
+   <link rel="stylesheet" href="{% static '/css/footers.css' %}">
+
+</head>
+
+<header class="header">
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+
+<body>
+{% block content %}
+
+<!-- Botones para alternar -->
+<div class="tabs">
+  <button onclick="mostrarPedidos('pendientes')">Pendientes</button>
+  <button onclick="mostrarPedidos('enviados')">Enviados</button>
+  <a class="tabs_boton_dashboard"href="{%url 'dashboard'%}">inicio</a>
+  {%if   business.stripe_account_id %}
+<a class="botones-categorias" target="_blank"  href="https://dashboard.stripe.com/dashboard" >Ver Transacciones</a>
+{%endif%}
+</div>
+
+{####################################### BUSCADOR #############################3#}
+<div class="buscador-wrapper">
+  <input type="text" id="buscador" placeholder="Buscar por Nombre..." oninput="filtrarPedidos()" />
+</div>
+{################################################################################}
+
+<!-- Lista de pedidos PENDIENTES -->
+<div id="pedidos_pendientes" class="pedidos-section">
+  {% for pedido in pedidos_pendientes %}
+    <div class="container_pedido">
+      <h3>Pedido #{{ pedido.pedido.id }}</h3>
+      <div class="direccion">
+        {{pedido.direccion.fecha_creacion.date}}
+        
+        {% if pedido.direccion.nombre_completo %}<p><strong>Nombre:</strong> {{ pedido.direccion.nombre_completo }}</p>{% endif %}
+        {% if pedido.direccion.telefono %}<p><strong>Teléfono:</strong> {{ pedido.direccion.telefono }}</p>{% endif %}
+        {% if pedido.direccion.opcion_entrega %}<p><strong>Servicio:</strong> {{ pedido.direccion.opcion_entrega }}</p>{% endif %}
+        
+        <!-- CAMPOS ESPECÍFICOS PARA HOTEL -->
+        {% if pedido.direccion.numero_habitacion %}<p><strong>Habitación:</strong> {{ pedido.direccion.numero_habitacion }}</p>{% endif %}
+        
+        
+        <!-- CAMPOS DE DIRECCIÓN FÍSICA YA NO SE MUESTRAN -->
+        
+        {% if pedido.direccion.propina_voluntaria %}<p><strong>Propina:</strong> ${{ pedido.direccion.propina_voluntaria }}</p>
+          {%else%}
+       <p class="propina">Marcó decidir propina despues</p>
+        {% endif %}
+        
+        <p><strong>Método de pago:</strong>
+          {% if pedido.metodo_pago == "tarjeta" %}
+            <span style="color:green"><strong>Tarjeta ✅</strong></span>
+          {% elif pedido.metodo_pago == "efectivo" %}
+            <span style="color:orange"><strong>Efectivo al recibir</strong></span>
+            <br><strong>Total a Pagar: ${{ pedido.total_pagado }}</strong>
+          {% elif pedido.metodo_pago == "habitacion" %}
+            <span style="color:blue"><strong>Cargo a habitación ✅</strong></span>
+          {% else %}
+            Desconocido
+          {% endif %}
+        </p>
+
+        <div class="instrucciones_entrega">
+          {% if pedido.direccion.notas %}<h4>Instrucciones especiales:</h4><p>{{ pedido.direccion.notas }}</p>{% endif %}
+        </div>
+
+        <div class="whatsapp">
+          <a target="_blank" href="https://wa.me/{{ pedido.whatsapp }}">Enviar Mensaje WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="ventas-header" aria-hidden="true">
+        <div>Producto</div>
+        <div>Cantidad</div>
+        <div>Precio c/u</div>
+        <div>Subtotal</div>
+        <div>Negocio</div>
+      </div>
+
+      {% for venta in pedido.ventas %}
+        <div class="venta-grid">
+          <div class="nombre_producto">{{ venta.producto }}</div>
+          <div>{{ venta.cantidad }}</div>
+          <div>${{ venta.precio_unitario }}</div>
+          <div>${{ venta.subtotal }}</div>
+          <div>{{ venta.negocio }}</div>
+          <div></div>
+        </div>
+
+        <div class="extras-wrapper">
+          {% if venta.extras %}
+            <h4>Extras:</h4>
+            <div class="extras-grid">
+              {% for extra in venta.extras %}
+                <div class="extra-card">
+                  <strong>{{ extra.nombre }}</strong>
+                  Cant: {{ extra.cantidad }}<br />
+                  ${{ extra.precio }} → ${{ extra.subtotal }}
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <span class="no-extras">Sin extras</span>
+          {% endif %}
+        </div>
+
+        <div class="nota-wrapper">
+          {% if venta.nota %}
+            <em><strong>Nota: </strong> {{ venta.nota }}</em>
+          {% else %}
+            <span class="sin-nota">Sin nota</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      {% if pedido.direccion.propina_voluntaria and pedido.direccion.propina_voluntaria > 0 %}
+        <p class="propina">Propina: ${{ pedido.direccion.propina_voluntaria }}</p>
+    
+      {% endif %}
+
+      <p class="total">Total Pagado: ${{ pedido.total_pagado }}</p>
+      
+
+      <form method="POST" action="{% url 'marcar_envio_pedido' pedido.pedido.id %}">
+        {% csrf_token %}
+        <input
+          type="checkbox"
+          name="enviado"
+          id="enviado_{{ pedido.pedido.id }}"
+          {% if pedido.pedido.enviado %}checked{% endif %}
+          onchange="this.form.submit()"
+        />
+        <label for="enviado_{{ pedido.pedido.id }}">
+          {% if pedido.direccion.opcion_entrega == "roomservice" %}
+            Marcar como entregado
+          {% else %}
+            Marcar como listo para recoger
+          {% endif %}
+        </label>
+      </form>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Lista de pedidos ENVIADOS -->
+<div id="pedidos_enviados" class="pedidos-section" style="display: none;">
+  {% for pedido in pedidos_enviados %}
+    <div class="container_pedido">
+      <h3>Pedido #{{ pedido.pedido.id }}</h3>
+      <div class="direccion">
+        {{pedido.direccion.fecha_creacion.date}}
+        
+        {% if pedido.direccion.nombre_completo %}<p><strong>Nombre:</strong> {{ pedido.direccion.nombre_completo }}</p>{% endif %}
+        {% if pedido.direccion.telefono %}<p><strong>Teléfono:</strong> {{ pedido.direccion.telefono }}</p>{% endif %}
+        {% if pedido.direccion.opcion_entrega %}<p><strong>Servicio:</strong> {{ pedido.direccion.opcion_entrega }}</p>{% endif %}
+        
+        <!-- CAMPOS ESPECÍFICOS PARA HOTEL -->
+        {% if pedido.direccion.numero_habitacion %}<p><strong>Habitación:</strong> {{ pedido.direccion.numero_habitacion }}</p>{% endif %}
+        
+        
+        {% if pedido.direccion.propina_voluntaria %}<p><strong>Propina:</strong> ${{ pedido.direccion.propina_voluntaria }}</p>{% endif %}
+        
+        <p><strong>Método de pago:</strong>
+          {% if pedido.metodo_pago == "tarjeta" %}
+            <span style="color:green"><strong>Tarjeta ✅</strong></span>
+          {% elif pedido.metodo_pago == "efectivo" %}
+            <span style="color:orange"><strong>Efectivo al recibir</strong></span>
+          {% elif pedido.metodo_pago == "habitacion" %}
+            <span style="color:blue"><strong>Cargo a habitación ✅</strong></span>
+          {% else %}
+            Desconocido
+          {% endif %}
+        </p>
+        
+        <div class="instrucciones_entrega">
+          {% if pedido.direccion.notas %}<h4>Instrucciones especiales:</h4><p>{{ pedido.direccion.notas }}</p>{% endif %}
+        </div>
+
+        <div class="whatsapp">
+          <a target="_blank" href="https://wa.me/{{ pedido.whatsapp }}">Enviar Mensaje WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="ventas-header" aria-hidden="true">
+        <div>Producto</div>
+        <div>Cantidad</div>
+        <div>Precio c/u</div>
+        <div>Subtotal</div>
+        <div>Negocio</div>
+      </div>
+
+      {% for venta in pedido.ventas %}
+        <div class="venta-grid">
+          <div class="nombre_producto">{{ venta.producto }}</div>
+          <div>{{ venta.cantidad }}</div>
+          <div>${{ venta.precio_unitario }}</div>
+          <div>${{ venta.subtotal }}</div>
+          <div>{{ venta.negocio }}</div>
+          <div></div>
+        </div>
+
+        <div class="extras-wrapper">
+          {% if venta.extras %}
+            <h4>Extras:</h4>
+            <div class="extras-grid">
+              {% for extra in venta.extras %}
+                <div class="extra-card">
+                  <strong>{{ extra.nombre }}</strong>
+                  Cant: {{ extra.cantidad }}<br />
+                  ${{ extra.precio }} → ${{ extra.subtotal }}
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <span class="no-extras">Sin extras</span>
+          {% endif %}
+        </div>
+
+        <div class="nota-wrapper">
+          {% if venta.nota %}
+            <em><strong>Nota: </strong> {{ venta.nota }}</em>
+          {% else %}
+            <span class="sin-nota">Sin nota</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      {% if pedido.direccion.propina_voluntaria and pedido.direccion.propina_voluntaria > 0 %}
+        <p class="propina">Propina ${{ pedido.direccion.propina_voluntaria }}</p>
+      {% endif %}
+
+      <p class="total">Total Pagado: ${{ pedido.total_pagado }}</p>
+     
+
+      <form method="POST" action="{% url 'marcar_envio_pedido' pedido.pedido.id %}">
+        {% csrf_token %}
+        <input
+          type="checkbox"
+          name="enviado"
+          id="enviado_{{ pedido.pedido.id }}"
+          {% if pedido.pedido.enviado %}checked{% endif %}
+          onchange="this.form.submit()"
+        />
+        <label for="enviado_{{ pedido.pedido.id }}">
+          {% if pedido.direccion.opcion_entrega == "roomservice" %}
+            Marcar como entregado
+          {% else %}
+            Marcar como listo para recoger
+          {% endif %}
+        </label>
+      </form>
+    </div>
+  {% endfor %}
+</div>
+
+{############### SCRIPT PARA EL BUSCADOR EN TIEMPO REAL #}
+<script>
+function filtrarPedidos() {
+  const input = document.getElementById('buscador').value.toLowerCase();
+  const secciones = ['pedidos_pendientes', 'pedidos_enviados'];
+
+  secciones.forEach(seccionId => {
+    const seccion = document.getElementById(seccionId);
+    const pedidos = seccion.querySelectorAll('.container_pedido');
+
+    pedidos.forEach(pedido => {
+      const nombre = pedido.querySelector('.direccion p strong')?.nextSibling?.textContent?.toLowerCase() || '';
+      if (nombre.includes(input)) {
+        pedido.style.display = 'block';
+      } else {
+        pedido.style.display = 'none';
+      }
+    });
+  });
+}
+</script>
+
+<script>
+  function mostrarPedidos(tipo) {
+    document.getElementById("pedidos_pendientes").style.display = tipo === 'pendientes' ? 'block' : 'none';
+    document.getElementById("pedidos_enviados").style.display = tipo === 'enviados' ? 'block' : 'none';
+  }
+
+  // Estado inicial
+  mostrarPedidos('pendientes');
+
+  // Actualiza texto del checkbox dinámicamente para hotel
+  document.querySelectorAll('form').forEach(form => {
+    const checkbox = form.querySelector('input[type="checkbox"][name="enviado"]');
+    const label = form.querySelector('label');
+
+    if (!checkbox || !label) return;
+
+    function actualizarEstado() {
+      const isRoomService = label.textContent.includes('entregado');
+      
+      if (checkbox.checked) {
+        form.classList.add('enviado');
+        label.textContent = isRoomService ? 'Entregado' : 'Listo para recoger';
+      } else {
+        form.classList.remove('enviado');
+        label.textContent = isRoomService ? 'Marcar como entregado' : 'Marcar como listo para recoger';
+      }
+    }
+
+    actualizarEstado(); // Al cargar
+    checkbox.addEventListener('change', actualizarEstado);
+  });
+</script>
+
+{###############################ESTE ES EL JS PARA QUE ACTUALICE EL NAVEGADOR CADA 2 MINUTOS Y DETECTE LOS PEDIDOS NUEVOS Y EMITA UN SONIDO #}
+<script>
+let pedidosPrevios = [];
+
+function arraysIguales(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  const sorted1 = [...arr1].sort();
+  const sorted2 = [...arr2].sort();
+  for (let i = 0; i < sorted1.length; i++) {
+    if (sorted1[i] !== sorted2[i]) return false;
+  }
+  return true;
+}
+
+function verificarNuevosPedidos() {
+  fetch("{% url 'obtener_pedidos_pendientes' business.id %}")
+    .then(response => response.json())
+    .then(data => {
+      const nuevos = data.ids;
+
+      const ahora = Date.now();
+      const ultimaRecarga = sessionStorage.getItem("lastReloadTime");
+      const hanPasado2Min = !ultimaRecarga || (ahora - parseInt(ultimaRecarga)) > 5 * 1000; // 5 segundos para pruebas
+
+      if (!arraysIguales(nuevos, pedidosPrevios) && hanPasado2Min) {
+        sessionStorage.setItem("lastReloadTime", ahora.toString());
+        location.reload();
+      }
+
+      pedidosPrevios = nuevos;
+    })
+    .catch(error => console.error("❌ Error al obtener pedidos:", error));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  verificarNuevosPedidos();
+  setInterval(verificarNuevosPedidos, 5 * 1000); // cada 5 segundos
+});
+</script>
+
+{% endblock %}
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+
+</body>
+</html>

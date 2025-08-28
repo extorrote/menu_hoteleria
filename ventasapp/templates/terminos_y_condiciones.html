@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            
+            line-height: 1.7;
+            color: #333;
+            background-color: #fff;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+            margin-top: 40px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        p, li {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            width: 130px;
+            height: 130px;
+            margin: 30px auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer {
+            width: 100%;
+            padding: 30px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            margin-top: 60px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            p, li {
+                font-size: 0.95em;
+            }
+
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .footer {
+                font-size: 0.8em;
+            }
+
+            .footer-links a {
+                margin: 0 5px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="body">
+    <div class="container">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+        </div>
+
+        <h1>Términos y Condiciones</h1>
+
+        <p>Al registrarte y utilizar esta plataforma como <strong>Propietario de Negocio</strong>, aceptas los términos y condiciones aquí descritos. Esta plataforma funciona como intermediario digital entre negocios, conductores y clientes. No somos responsables por productos, entregas, ni disputas fuera de lo técnico del sistema.</p>
+
+        <h2>1. Conductores</h2>
+        <p>Los conductores son gestionados directamente por la plataforma a través de grupos de comunicación como WhatsApp. No tienen acceso a registro ni control directo dentro del sistema.</p>
+        <p>Todo conductor que acepte entregas a través de esta plataforma debe cumplir con las siguientes responsabilidades:</p>
+        <ul>
+            <li>Verificar que el pedido esté completo y correctamente empacado antes de retirarlo del negocio.</li>
+            <li>Transportar los pedidos con cuidado y asegurarse de que lleguen en buenas condiciones al cliente.</li>
+            <li>En caso de que el pedido llegue <strong>incompleto o dañado</strong>, el conductor será responsable y deberá reponerlo a su propio costo.</li>
+            <li>Si el negocio entregó el pedido correctamente y el conductor lo manejó de forma negligente, el conductor deberá cubrir el costo de una nueva orden.</li>
+            <li>El conductor será responsable de <strong>revisar bien el pedido</strong> antes de entregarlo al cliente.</li>
+            <li>El propietario de cada negocio descontará un <strong>4% del valor del envío y de la propina</strong> pagadas con tarjeta, correspondiente a los costos de procesamiento de pagos. Este porcentaje <strong>no es para la plataforma SABOR LOCAL ni para el negocio</strong>; se transfiere directamente a la entidad que gestiona los pagos con tarjeta.</li>
+        </ul>
+
+        <h2>2. Propietarios de Negocio</h2>
+        <ul>
+            <li>Es responsabilidad del negocio preparar el pedido correctamente, asegurarse de que esté completo y bien empacado antes de entregarlo al conductor.</li>
+            <li>Si el pedido fue entregado correctamente al conductor y llega en mal estado, el negocio no será responsable.</li>
+            <li>Se espera colaboración en caso de disputas para facilitar una solución justa.</li>
+        </ul>
+
+        <h2>3. Disputas entre Conductores y Negocios</h2>
+        <p>En caso de disputas entre conductores y propietarios de negocio:</p>
+        <ul>
+            <li>Ambas partes deben tratar de resolver el conflicto directamente.</li>
+            <li>Si no hay solución, la plataforma intervendrá y tomará una decisión basada en la información disponible.</li>
+            <li><strong>La plataforma no se responsabiliza económicamente</strong> por disputas de este tipo.</li>
+        </ul>
+
+        <h2>4. Responsabilidad de la Plataforma</h2>
+        <ul>
+            <li>La plataforma solo se hace responsable por errores técnicos en el sistema (por ejemplo, problemas en la app, fallas en la creación de pedidos o cobros duplicados).</li>
+            <li>No asumimos responsabilidad por errores humanos cometidos por el conductor o el negocio.</li>
+        </ul>
+
+        <h2>5. Aceptación</h2>
+        <p>El uso de esta plataforma implica la aceptación total de estos términos. Nos reservamos el derecho de actualizar estos términos en cualquier momento. Las modificaciones serán comunicadas oportunamente.</p>
+
+        <h2>6. Usuarios (Clientes)</h2>
+        <ul>
+            <li><strong>Revisión en el momento de la entrega:</strong> El cliente debe revisar el pedido en presencia del conductor antes de que se retire. Si hay errores (producto faltante, incorrecto o dañado), deben ser reportados inmediatamente.</li>
+            <li><strong>Correcciones inmediatas:</strong> Si el pedido presenta errores al momento de la entrega, el negocio o el conductor, según corresponda, deberán corregir el problema antes de que se complete la entrega.</li>
+            <li><strong>No se aceptan reclamos posteriores:</strong> Una vez que el conductor se haya retirado, no se aceptarán cambios, devoluciones ni reembolsos por parte del negocio ni del conductor.</li>
+        </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{%url 'politica_de_privacidad'%}">Política de Privacidad</a> | <a href="{% url 'tienda' %}">Volver al inicio</a>
+        </div>
+        <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+    </footer>
+</div>
+</body>
+</html>

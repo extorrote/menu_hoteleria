@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/perfiles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <title>Mi Perfil - Conserje</title>
+</head>
+<header>
+    <div class="logo">
+        <img src="{% static '/images/logo.png' %}" alt="Logo">
+    </div>
+</header>
+<body>
+
+<div class="body">
+{% block content %}
+<h2>👤 Mi Perfil Profesional (Concierge)</h2>
+
+<div class="profile-container">
+    <div class="profile-header">
+        {% if profile.profile_picture %}
+            <div class="profile-image">
+                <img src="{{ profile.profile_picture.url }}" alt="Foto de perfil" width="150">
+            </div>
+        {% else %}
+            <div class="profile-image">
+                <img src="{% static 'images/logo.png' %}" alt="Foto de perfil" width="150">
+            </div>
+        {% endif %}
+        
+        <div class="profile-info">
+            <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+            {% if profile.is_approved %}
+            <p><strong>Estado de cuenta:</strong> Aprobado  <img class="checked_icono" src="{%static 'images/checked.png'%}"></p>
+            {% else %}
+                <p><strong>Estado de cuenta:</strong> Pendiente de aprobación. Te notificaremos cuando tu cuenta sea aprobada.</p>
+            {% endif %}
+            <p><strong>Nombre de la empresa:</strong> {{ profile.company_name }}</p>
+            <p><strong>Nombre:</strong> {{ user.first_name }} </p>
+            <p><strong>Apellido:</strong> {{ user.last_name }}</p>                       
+            <p><strong>Ubicación:</strong> {{ profile.get_city_display }}</p>
+            <p><strong>Teléfono de contacto:</strong> {{ profile.telephone }}</p>
+            <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+            <p><strong>Rol en la plataforma:</strong> {{ profile.get_role_display }}</p>
+        </div>
+    </div>
+
+    {% if profile.id_document %}
+        <p><strong>Documento de identidad:</strong> Cargado</p>
+    {% else %}
+        <p><strong>Documento de identidad:</strong> No cargado. Por favor, sube tu documento para completar tu perfil.</p>
+    {% endif %}
+
+    <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="edit-btn">✏️ Editar Perfil</a>
+        <a href="{% url 'dashboard' %}" class="back-btn">← Volver inicio</a>
+    </div>
+</div>
+{% endblock %}
+</div> <!-- ##################### CIERRA DIV BODY -->
+
+</body>
+</html>

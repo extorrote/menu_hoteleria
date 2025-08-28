@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Meta SEO para el carrito -->
+<title>Tu carrito en Sabor Local | Compra fácil y directo a negocios locales</title>
+<meta name="description" content="Revisa y edita tu carrito en Sabor Local. Compra directo a negocios locales con menos comisiones y mejores precios. Rápido, fácil y sin publicidad.">
+<meta name="keywords" content="carrito, Sabor Local, productos locales, negocios locales, Puerto Vallarta, precios bajos, comprar directo, comercio justo, entrega rápida, sin comisiones, carrito de compras">
+<meta name="author" content="Sabor Local">
+<meta name="robots" content="noindex, follow"><!-- Evitamos indexar la página de carrito directamente -->
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tu carrito en Sabor Local | Compra local con mejores precios">
+<meta property="og:description" content="Revisa tus productos, edita cantidades y procede al pago en Sabor Local. Apoya negocios locales con cada compra.">
+<meta property="og:url" content="https://saborlocalpv.com/carrito/">
+<meta property="og:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta property="og:site_name" content="Sabor Local PV">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Carrito | Sabor Local">
+<meta name="twitter:description" content="Compra fácil, directo y con mejores precios en Sabor Local. Revisa tu carrito y apoya el comercio local.">
+<meta name="twitter:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Favicon -->
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com/carrito/">
+{#########################33 FIN META TAGS ##################################}
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+  <link rel="stylesheet" href="{% static '/css/headers.css' %}">
+  <link rel="stylesheet" href="{% static '/css/footers.css' %}">
+  <link rel="stylesheet" href="fuentes.css"><!--ESTO ES PARA CARGAR FUENTES NUEVAS-->
+
+  <!-- ESTO ES PARA PASAR LAS FOTOS  -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+  <!-- ESTO ES PARA PASAR LAS FOTOS TAMBIEN -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+{%if cart_items_info%}
+<div class="body">
+<h2>Resumen del Carrito</h2>
+
+
+<form method="POST" >
+    {% csrf_token %}
+    <div class="container_grid">
+    {% for item_info in cart_items_info %}
+        {% with item=item_info.item %}
+        <div class="item">
+
+            
+            <div class="div_item_titulo_cantidad">
+            <h3>{{ item.producto.name }}</h3>
+            {#<span> (x{{ item.cantidad }})</span>#}
+            </div>
+            
+            {% if item.producto.image1 %}
+                <img src="{{ item.producto.image1.url }}" onclick="openLightbox('{{ item.producto.image1.url }}')"/>
+            {% endif %}
+            
+            {% if item.producto.price %}
+            <div class="precio_producto">Precio ${{item.producto.price}}</div>
+            {% endif %}
+            
+            <div class="div_cantidad" data-item-id="{{ item.id }}">
+            <label>Cantidad Producto</label>
+            <div class="number-input" data-item-id="{{ item.id }}">
+              <button type="button" class="minus">−</button>
+              <input type="number" name="cantidad_{{ item.id }}" class="cantidad-input" min="1" value="{{ item.cantidad }}">
+              <button type="button" class="plus">+</button>
+            </div>
+            </div>
+
+            
+            <!-- Textarea para la nota -->
+           
+              <fieldset>
+            <legend>¿Notas para esta Orden?</legend>
+
+              
+            
+              <textarea name="nota_{{ item.id }}" rows="3" cols="30">{{ item.nota|default_if_none:"" }}</textarea>
+              </fieldset>
+           
+
+            {% if item.producto.extras.all %}
+                <details>
+                    <summary>{# agregar extras  ESTE TEXTO SE LO AGREGUE CON CSS #}</summary>
+                {% for extra in item.producto.extras.all %}                             
+                    <p class="titulo_extras">{{ extra.nombre }}</p>
+                    <div class="extras_grid number-input" data-item-id="{{ item.id }}" data-extra-id="{{ extra.id }}">
+                    <label>(+${{ extra.precio }}) c/u</label>
+                    <button type="button" class="minus">−</button>
+                    <input type="number" name="extra_{{ item.id }}_{{ extra.id }}" class="cantidad-extra-input" min="0"
+                      value="{% for e in item.extras_en_carrito.all %}{% if e.extra.id == extra.id %}{{ e.cantidad }}{% endif %}{% endfor %}">
+                    <button type="button" class="plus">+</button>
+                  </div>
+
+                {% endfor %}
+                </details>
+            {% endif %}
+               <a data-eliminar-item href="{% url 'eliminar_item_carrito' item.id %}"
+                class="eliminar"
+                onclick="return confirm('¿Estás seguro de que quieres eliminar este producto del carrito?');">
+                Eliminar
+              </a>
+
+
+            {% endwith %}
+        </div>{# CIERRE item GRID#}
+        
+ 
+
+
+
+    {% endfor %}
+    </div>{# CIERRE container GRID#}
+    
+    {# Botón deshabilitado porque actualizamos automáticamente #}
+    {#<button class="boton_actualizar"type="submit" name="action" value="guardar">Guardar Extras y Cantidades</button>#}
+    <div class="total">
+      <h4 class="total_general">Total: ${{ total_general }}</h4> {# La clase para actualizar total #}
+    </div>
+
+    <div class="botones_pago_y_regresar"> 
+        {%if user.is_authenticated%}
+        <a href="{% url 'dashboard' %}">Regresar</a>
+        {%else%}
+        <a href="javascript:history.back()">Regresar</a>
+        {%endif%}
+        <button type="submit" name="action" value="proceder">Proceder al pago</button>
+    </div>
+</form>
+
+{%else%}
+<p class="carrito_bacio"> Tu carrito Está Vacío. </p>
+<p class="carrito_bacio carrito_bacio_regresar"> <a href={%url 'tienda' %} >Regresar</a></p>
+{%endif%}
+</div>
+
+{# JS para actualizar cantidades, extras y nota automáticamente #}
+<script> 
+document.addEventListener("DOMContentLoaded", function() {
+  // Escucha cambios en inputs y textarea
+  document.querySelectorAll("input[type='number'], textarea").forEach(function(input) {
+    input.addEventListener("change", function() {
+      actualizarCarritoDesdeInput(input);
+    });
+  });
+
+  // Funcionalidad para botones + y - del producto principal
+  document.querySelectorAll(".number-input:not([data-extra-id])").forEach(function(container) {
+    const minusBtn = container.querySelector(".minus");
+    const plusBtn = container.querySelector(".plus");
+    const input = container.querySelector(".cantidad-input");
+    const itemId = container.getAttribute("data-item-id");
+
+    if (minusBtn && plusBtn && input) {
+      minusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value);
+        if (current > 1) {
+          input.value = current - 1;
+          actualizarCarritoDesdeInput(input);
+        }
+      });
+
+      plusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value);
+        input.value = current + 1;
+        actualizarCarritoDesdeInput(input);
+      });
+    }
+  });
+
+  // Funcionalidad para botones + y - de EXTRAS
+  document.querySelectorAll(".number-input[data-extra-id]").forEach(function(container) {
+    const minusBtn = container.querySelector(".minus");
+    const plusBtn = container.querySelector(".plus");
+    const input = container.querySelector(".cantidad-extra-input");
+    const itemId = container.getAttribute("data-item-id");
+
+    if (minusBtn && plusBtn && input) {
+      minusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value) || 0;
+        if (current > 0) {
+          input.value = current - 1;
+          input.dispatchEvent(new Event("change"));  // Usa misma lógica
+        }
+      });
+
+      plusBtn.addEventListener("click", function() {
+        let current = parseInt(input.value) || 0;
+        input.value = current + 1;
+        input.dispatchEvent(new Event("change"));  // Usa misma lógica
+      });
+    }
+  });
+
+  function actualizarCarritoDesdeInput(input) {
+    const inputName = input.name;
+    const parts = inputName.split("_");
+    const itemId = parts[1];
+
+    let cantidadProducto = document.querySelector(`input[name='cantidad_${itemId}']`)?.value || 1;
+    let nota = document.querySelector(`textarea[name='nota_${itemId}']`)?.value || "";
+
+    let extras = {};
+    document.querySelectorAll(`input[name^='extra_${itemId}_']`).forEach(function(extraInput) {
+      const extraId = extraInput.name.split("_")[2];
+      extras[extraId] = extraInput.value;
+    });
+
+    fetch("{% url 'actualizar_carrito_ajax' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        cantidad: cantidadProducto,
+        extras: extras,
+        nota: nota
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        console.log("Carrito actualizado");
+        const totalElement = document.querySelector(".total_general");
+        if (totalElement) {
+          totalElement.textContent = "Total: $" + data.total_general;
+        }
+      } else {
+        console.error(data.message);
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  }
+});
+</script>
+
+{# ESTO LO AGREGUE PARA QUE NO QUEDE EN local storage LOS ITEMS ELIMINADOS, PORQUE NO ME ESTABAN DEJANDO GUARDAR ITEMS DE OTRO NEGOCIO SIN ESTO #}
+{######### APARTE DE ESTE SCRIPT DEBO AGREGARLE AL BOTON ELIMINAR  data-eliminar-item  PARA QUE CUANDO SE ELIMINE SE ACTUALICE EL localstorage #}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('[data-eliminar-item]').forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      // Detecta si solo hay un producto en el carrito antes de eliminarlo
+      const itemsEnCarrito = document.querySelectorAll("[data-eliminar-item]");
+      if (itemsEnCarrito.length === 1) {
+        localStorage.removeItem("carrito_business_id");
+        console.log("Último ítem eliminado. LocalStorage limpiado.");
+      }
+    });
+  });
+});
+</script>
+
+{#####################################################################################################################}
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+</body>
+</html>

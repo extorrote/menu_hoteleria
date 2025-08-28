@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/index.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css'%}">
+    <style>
+        button{
+            width:125px;
+            height:40px;
+            background-color:orangered;
+            color:#fff;
+            text-align:center;
+            cursor:pointer;
+        }
+        a{
+            font-size:20px;
+        }
+        h2{
+            max-width:380px;
+            width:100%
+            display:flex;
+            margin:20px auto;
+            justify-content:center !important;
+            align-items:center !important;
+            
+        }
+    </style>
+</head>
+    <header>
+    <div class="logo">
+        <img src="{%static '/images/logo.png'%}">
+    </div>
+
+</header>
+<body>
+
+<div class="body">
+{% block content %}
+<h2>¿Estás seguro de que deseas eliminar?</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, eliminar</button>
+    <a href="{% url 'dashboard' %}">Cancelar</a>
+</form>
+{% endblock %}
+
+</div>
+</body>
+</html>

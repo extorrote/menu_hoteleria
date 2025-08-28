@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirigiendo a Stripe...</title>
+</head>
+<body>
+    <p>Redirigiendo a la plataforma de pagos segura...</p>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        fetch("{% url 'start_subscription_for_business' business.id %}")
+            .then(response => response.json())
+            .then(data => {
+                const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+                stripe.redirectToCheckout({ sessionId: data.sessionId });
+            });
+    </script>
+</body>
+</html>

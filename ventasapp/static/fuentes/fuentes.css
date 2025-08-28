@@ -1,0 +1,325 @@
+/*AQUI VAMOS A DEFINIR UNA NUEVA ESTRUCTURA PARA FUENTES NUEVAS*/ 
+/* EL PESO DE LAS FUENTES EXISTE SOLAMENTE DE 100 A 500 y de 600 a 900 , SOLO HAY 2 DIFERENCIAS DE CAMBIOS */
+
+@font-face{
+    font-family:"cris";
+    src: url(/static/fonts/RubikMonoOne-Regular.ttf) format("truetype");/*ttf SIGNIFICA Truetype*/
+    font-weight: 900;
+    
+    
+}
+
+@font-face{
+    font-family:"cris2";
+    src: url(/static/fonts/RubikMonoOne-Regular.ttf) format("truetype");
+    font-weight: 400;
+    
+    
+}
+
+
+@font-face{
+    font-family:"estetica_mayuscula";
+    src: url(/static/fonts/estetica_mayuscula.ttf) format("truetype");/*ttf SIGNIFICA Truetype*/
+    font-weight: 400;
+    
+    
+}
+
+@font-face{
+    font-family:"estetica_mayuscula2";
+    src: url(/static/fonts/estetica_mayuscula.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+/*#######################################################################*/
+
+
+@font-face{
+    font-family:"desgastadita";
+    src: url(/static/fonts/RubikLines-Regular.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+@font-face{
+    font-family:"desgastadita2";
+    src: url(/static/fonts/RubikLines-Regular.ttf) format("truetype");
+    font-weight: 500;
+    
+    
+}
+
+@font-face{
+    font-family:"rusa";
+    src: url(/static/fonts/RussoOne-Regular.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+@font-face{
+    font-family:"rayadita";
+    src: url(/static/fonts/Monoton-Regular.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+
+@font-face{
+    font-family:"rayadita2";
+    src: url(/static/fonts/Monoton-Regular.ttf) format("truetype");
+    font-weight: 500;
+    
+    
+}
+
+@font-face{
+    font-family:"3d";
+    src: url(/static/fonts/3d.ttf) format("truetype");
+    font-weight: 500;
+    
+    
+}
+
+@font-face{
+    font-family:"3d2";
+    src: url(/static/fonts/3d.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+
+@font-face{
+    font-family:"melthing";
+    src: url(/static/fonts/Nosifer-Regular.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+@font-face{
+    font-family:"barras";
+    src: url(/static/fonts/barras.ttf) format("truetype");
+    font-weight: 900;
+    
+    
+}
+
+
+/*######################################*/
+@font-face{
+    font-family: "3d_redondeada";
+    src: url(/static/fonts/RubikVinyl-Regular.ttf) format("truetype");
+    font-weight: 900;
+}
+
+
+/*###################################################*/
+
+
+
+
+
+
+/*##################################*/
+
+
+
+@font-face{
+    font-family: "letra_puntos1";
+    src: url(/static/fonts/Codystar-Light.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "letra_puntos2";
+    src: url(/static/fonts/Codystar-Regular.ttf) format("truetype");
+    font-weight: 900;
+}
+
+
+@font-face{
+    font-family: "primera_letra_grande";
+    src: url(/static/fonts/primera_letra_grande.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "primera_letra_grande2";
+    src: url(/static/fonts/primera_letra_grande2.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "punticos_raritos";
+    src: url(/static/fonts/punticos_raritos.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "punticos_raritos2";
+    src: url(/static/fonts/punticos_raritos.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "chidita_rara";
+    src: url(/static/fonts/chidita_rara.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "chidita_rara2";
+    src: url(/static/fonts/chidita_rara.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "rarita_gruesa";
+    src: url(/static/fonts/rarita_gruesa.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "rarita_gruesa2";
+    src: url(/static/fonts/rarita_gruesa.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "pegada_gruesita_entendible";
+    src: url(/static/fonts/pegada_gruesita_entendible.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "pegada_gruesita_entendible2";
+    src: url(/static/fonts/pegada_gruesita_entendible.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "robotica";
+    src: url(/static/fonts/robotica.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "robotica2";
+    src: url(/static/fonts/robotica.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "titulo_tipo_pelicula";
+    src: url(/static/fonts/titulo_tipo_pelicula.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "titulo_tipo_pelicula2";
+    src: url(/static/fonts/titulo_tipo_pelicula.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "redondita_tipo_3d";
+    src: url(/static/fonts/chingonsita_tipo_3d.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "redondita_tipo_3d2";
+    src: url(/static/fonts/chingonsita_tipo_3d.ttf) format("truetype");
+    font-weight: 900;
+}
+
+/*################### UNA DE MIS NUEVAS FAVORITAS*/
+@font-face{
+    font-family: "chida_con_fondito_rayado";
+    src: url(/static/fonts/chida_con_fondito_rayado.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "chida_con_fondito_rayado2";
+    src: url(/static/fonts/chida_con_fondito_rayado.ttf) format("truetype");
+    font-weight: 900;
+}
+
+/* ############## ME ENCANTA PERO CREO QUE EL USUARIO DEBE INSTALARLA PARA PODERLA VER*/
+@font-face{
+    font-family: "3d_ventilada";
+    src: url(/static/fonts/3d_ventilada.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "chida_con_fondito_rayado2";
+    src: url(/static/fonts/3d_ventilada.ttf) format("truetype");
+    font-weight: 900;
+}
+
+
+@font-face{
+    font-family: "letra_divertida";/*COMO CON FIGURITAS*/
+    src: url(/static/fonts/letra_divertida.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "letra_divertida2";
+    src: url(/static/fonts/letra_divertida.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "fondo_roto";/* ME GUSTA BASTANTE */
+    src: url(/static/fonts/fondo_roto.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "fondo_roto2";
+    src: url(/static/fonts/fondo_roto.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "desgastadita_dos";/* ME GUSTA BASTANTE */
+    src: url(/static/fonts/desgastadita2.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "desgastadita_dos";
+    src: url(/static/fonts/desgastadita2.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "peluche";/* ME GUSTA BASTANTE */
+    src: url(/static/fonts/peluche.ttf) format("truetype");
+    font-weight: 900;
+}
+
+@font-face{
+    font-family: "peluche";
+    src: url(/static/fonts/peluche.ttf) format("truetype");
+    font-weight: 900;
+}
+
+
+/* FUENTES QUE NO SON DE GOOGLE SE INSTALAN EN LA COMPUTADORA Y DESPUES SE CONCATENAN NORMAL EN CSS */
+
+/* 
+"new pose"
+"luxuri"
+"Lightning Script"
+
+/*  

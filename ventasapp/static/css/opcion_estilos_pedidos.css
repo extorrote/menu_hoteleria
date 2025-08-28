@@ -1,0 +1,414 @@
+
+  body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: #e8f1f2;
+    padding: 20px;
+    color: #1f3a3d;
+  }
+
+  .container_pedido {
+    max-width: 1000px;
+    width: 100%;
+    border-bottom: 6px double #0a7e8c;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: #1f3a3d;
+    margin-bottom: 10px;
+  }
+
+  pre {
+    background: #ffffff;
+    padding: 10px;
+    border-left: 4px solid #0a7e8c;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .venta-grid {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 12px;
+    padding: 15px 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(15, 40, 45, 0.1);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    align-items: start;
+  }
+
+  .ventas-header {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 12px;
+    font-weight: 700;
+    background-color: #b9d9dc;
+    color: #1f3a3d;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    user-select: none;
+  }
+
+  .venta-grid > div {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+    position: relative;
+  }
+
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .extra-card {
+    background: #e1f0f2;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border-left: 4px solid #0a7e8c;
+    box-shadow: 0 1px 3px rgba(15, 40, 45, 0.1);
+    line-height: 1.2;
+  }
+
+  .extra-card strong {
+    color: #0a7e8c;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+
+  .no-extras {
+    font-style: italic;
+    color: #7a8a8b;
+    font-size: 0.9rem;
+  }
+
+  p.total {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f3a3d;
+    margin-top: 15px;
+    margin-bottom: 25px;
+  }
+
+  form {
+    margin: 10px auto;
+    padding: 10px 15px;
+    background: #d4e9eb;
+    border-left: 4px solid #0a7e8c;
+    border-radius: 6px;
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  label {
+    font-weight: 600;
+    color: #1f3a3d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"]:checked(.container_pedido) {
+    background-color: red;
+  }
+
+  @media (max-width: 900px) {
+    .venta-grid,
+    .ventas-header {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 2fr;
+      gap: 8px;
+      padding: 12px 15px;
+    }
+    p.total {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .venta-grid,
+    .ventas-header {
+      display: block;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      margin-bottom: 20px;
+    }
+
+    .ventas-header {
+      display: none;
+    }
+
+    .venta-grid > div {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(15, 40, 45, 0.05);
+      margin-bottom: 8px;
+      padding-left: 120px;
+      font-size: 0.95rem;
+    }
+
+    .venta-grid > div::before {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: #1f3a3d;
+      white-space: nowrap;
+    }
+
+    .venta-grid > div:nth-child(1)::before { content: "Producto:"; }
+    .venta-grid > div:nth-child(2)::before { content: "Cantidad:"; }
+    .venta-grid > div:nth-child(3)::before { content: "Precio unitario:"; }
+    .venta-grid > div:nth-child(4)::before { content: "Subtotal:"; }
+    .venta-grid > div:nth-child(5)::before { content: "Negocio:"; }
+
+    .venta-grid > div:nth-child(6) {
+      padding-left: 15px;
+      padding-top: 10px;
+    }
+
+    .venta-grid > div:nth-child(6)::before {
+      position: static;
+      transform: none;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #1f3a3d;
+      content: "Extras:";
+    }
+  }
+
+
+  /*############################################################33*/
+
+
+    body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: #ecf0f1;
+    padding: 20px;
+    color: #2c3e50;
+  }
+
+  .container_pedido {
+    max-width: 1000px;
+    width: 100%;
+    border-bottom: 6px double #3498db;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+
+  pre {
+    background: #ffffff;
+    padding: 10px;
+    border-left: 4px solid #3498db;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .venta-grid {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 12px;
+    padding: 15px 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    align-items: start;
+  }
+
+  .ventas-header {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr 1fr 1fr 1.5fr 2fr;
+    gap: 12px;
+    font-weight: 700;
+    background-color: #bdc3c7;
+    color: #2c3e50;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    user-select: none;
+  }
+
+  .venta-grid > div {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+    position: relative;
+  }
+
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .extra-card {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border-left: 4px solid #3498db;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+  }
+
+  .extra-card strong {
+    color: #3498db;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+
+  .no-extras {
+    font-style: italic;
+    color: #777;
+    font-size: 0.9rem;
+  }
+
+  p.total {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 15px;
+    margin-bottom: 25px;
+  }
+
+  form {
+    margin: 10px auto;
+    padding: 10px 15px;
+    background: #ddeaf3;
+    border-left: 4px solid #3498db;
+    border-radius: 6px;
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  label {
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"]:checked(.container_pedido) {
+    background-color: red;
+  }
+
+  @media (max-width: 900px) {
+    .venta-grid,
+    .ventas-header {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 2fr;
+      gap: 8px;
+      padding: 12px 15px;
+    }
+    p.total {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .venta-grid,
+    .ventas-header {
+      display: block;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      margin-bottom: 20px;
+    }
+
+    .ventas-header {
+      display: none;
+    }
+
+    .venta-grid > div {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 8px;
+      padding-left: 120px;
+      font-size: 0.95rem;
+    }
+
+    .venta-grid > div::before {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: #2c3e50;
+      white-space: nowrap;
+    }
+
+    .venta-grid > div:nth-child(1)::before { content: "Producto:"; }
+    .venta-grid > div:nth-child(2)::before { content: "Cantidad:"; }
+    .venta-grid > div:nth-child(3)::before { content: "Precio unitario:"; }
+    .venta-grid > div:nth-child(4)::before { content: "Subtotal:"; }
+    .venta-grid > div:nth-child(5)::before { content: "Negocio:"; }
+
+    .venta-grid > div:nth-child(6) {
+      padding-left: 15px;
+      padding-top: 10px;
+    }
+
+    .venta-grid > div:nth-child(6)::before {
+      position: static;
+      transform: none;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #2c3e50;
+      content: "Extras:";
+    }
+  }
+
+
+/*##################################################################
+
+
+/*##################################################################

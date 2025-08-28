@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/registrarse.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css' %}">
+    <title>Agregar Extra</title>
+
+
+</head>
+
+<header>
+    <div class="logo">
+        <img src="{% static '/images/logo.png' %}" alt="Logo">
+    </div>
+</header>
+
+<body>
+<div class="body">
+    <h2>Agregar Extra al Producto: {{ producto.name }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.nombre.label_tag }}
+        {{ form.nombre }}
+
+        {{ form.descripcion.label_tag }}
+        {{ form.descripcion }}
+
+        {{ form.precio.label_tag }}
+        {{ form.precio }}
+
+        {{ form.cantidad_disponible.label_tag }}
+        {{ form.cantidad_disponible }}
+
+        <button type="submit" class="btn-guardar-extra">Guardar </button>
+    </form>
+
+    {% if not editando %}
+        <h2>Extras actuales para este producto</h2>
+        {% if extras %}
+            <ul>
+                {% for extra in extras %}
+                    <li>
+                        {{ extra.nombre }} (+${{ extra.precio }})
+                        <div class="extra-action-buttons">
+                            <a href="{% url 'editar_extra' extra.id %}" class="btn-editar-extra">Editar</a>
+                            <form method="post" action="{% url 'eliminar_extra' extra.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-eliminar-extra" onclick="return confirm('¿Seguro que quieres eliminar este extra?');">Eliminar</button>
+                            </form>
+
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay extras agregados para este producto aún.</p>
+        {% endif %}
+    {% endif %}
+
+    <div class="regresar-dashboard">
+        <a href="{% url 'dashboard' %}" class="btn-regresar-dashboard">← Regresar al Dashboard</a>
+        {%if editando %}
+        <button type="button" onclick="window.history.back();" class="btn-regresar-a-extras">
+  ← Regresar a Extras
+</button>
+{%endif%}
+    </div>
+</div>
+</body>
+</html>

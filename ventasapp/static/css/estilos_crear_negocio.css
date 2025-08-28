@@ -1,0 +1,265 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+   background-image:linear-gradient(#fff,#00471b
+   ,#fff) ;
+}
+/* Reset some default styles */
+form, fieldset, legend, label, input, select, textarea, button {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+form {
+    max-width: 900px;
+    margin: 1rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+fieldset {
+    border: none;
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+legend {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 500;
+    color: #444;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="time"],
+input[type="url"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #00471b;
+    outline: none;
+    background-color: #fff;
+}
+
+small {
+    display: block;
+    margin-top: 0.3rem;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+button[type="submit"] {
+    display: flex;
+    margin:auto;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    max-width:300px;
+    width:100%;
+    height:50px;
+    background-color: #00471b;
+    
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+button[type="submit"]:hover {
+    background-color: #00471bd4;
+}
+
+/* Image inputs - displayed in grid */
+fieldset:has(input[type="file"]) {
+    display: flex;
+    flex-direction: column;
+}
+
+fieldset:has(input[type="file"]) p {
+    margin-bottom: 1rem;
+}
+
+fieldset:has(input[type="file"]) input[type="file"] {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+    form {
+        padding: 3rem;
+    }
+
+    fieldset {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    fieldset > label {
+        flex: 1 1 45%;
+        margin-top: 1rem;
+    }
+
+    fieldset > input,
+    fieldset > select,
+    fieldset > textarea {
+        flex: 1 1 45%;
+    }
+
+    fieldset > small {
+        flex: 1 1 100%;
+    }
+}
+
+/* -------- Custom: Business Category Grid Styles -------- */
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.category-box {
+    flex: 1 1 240px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.8rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.category-box h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.category-box .checkbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+}
+
+.category-box label {
+    flex: 1 1 40%;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    margin-bottom: 0.3rem;
+    color: #444;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.category-box input[type="checkbox"] {
+    margin-right: 0.4rem;
+    
+
+}
+
+.closed-days-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    justify-content: flex-start;
+    
+}
+
+.closed-day-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    color:white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95em;
+    cursor: pointer;
+    min-width: 100px; /* Ensures consistent width for each day */
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+}
+.closed-day-option:first-child{
+    background-color: #48b;
+    
+}
+.closed-day-option:nth-child(2){
+    background-color: #FF0B55;
+}
+
+.closed-day-option:nth-child(3){
+    background-color: #FF6500;
+}
+
+.closed-day-option:nth-child(4){
+    background-color: #3E7B27;
+    
+}
+
+.closed-day-option:nth-child(5){
+    background-color: #854836;
+}
+
+.closed-day-option:nth-child(6){
+    background-color: #441752;
+}
+
+.closed-day-option:nth-child(7){
+    background-color: #B8001F;
+}
+
+
+/* Optional: On very small screens, reduce padding */
+@media (max-width: 480px) {
+    .closed-day-option {
+        min-width: 80px;
+        padding: 6px 8px;
+        font-size: 0.85em;
+    }
+}
+
+.boton-regresar{
+    width:100%;
+    display:flex;
+    margin:auto;
+    justify-content: center;
+    align-items: center;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+input[type="checkbox"]{
+    accent-color: green;
+    cursor: pointer;
+}
+

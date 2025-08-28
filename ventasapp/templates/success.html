@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Meta SEO -->
+<title>Gracias por tu compra | Sabor Local</title>
+<meta name="description" content="Consulta el resumen de tu pedido de room service en Sabor Local. ¡Gracias por comprar local!">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Favicon -->
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+
+<!-- Open Graph (para compartir en redes sociales como Facebook, WhatsApp) -->
+<meta property="og:title" content="Gracias por tu compra | Sabor Local">
+<meta property="og:description" content="Revisa los detalles de tu pedido realizado en Sabor Local.">
+<meta property="og:image" content="{% static 'images/logo.png' %}">
+<meta property="og:url" content="https://saborlocal.mx/gracias">
+<meta property="og:type" content="website">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+  <link rel="stylesheet" href="{% static '/css/headers.css' %}">
+  <link rel="stylesheet" href="{% static '/css/footers.css' %}">
+  <link rel="stylesheet" href="fuentes.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+
+{%if pedido.ventas %}{# ESTO LO PUSE PARA QUE CUANDO EL USUARIO REFRESQUE EL NAVEGADOR NO SALGA NADA MAS QUE EL BOTON#}
+
+<div class="body">
+<h2>¡Gracias por tu pedido!</h2>
+<h3 class="resumen_compra_h3">Resumen del Pedido</h3>
+
+<form>
+  <div class="container_grid">
+    {% for venta in pedido.ventas %}
+    <div class="item">
+
+      <div class="div_item_titulo_cantidad">
+        <h3>{{ venta.producto }}</h3>
+      </div>
+
+      {% if venta.imagen %}
+        <img src="{{ venta.imagen }}" onclick="openLightbox('{{ venta.imagen }}')">
+      {% endif %}
+
+      <div class="precio_producto">Precio ${{ venta.precio_unitario }}</div>
+
+      <div class="div_cantidad">
+        <label>Cantidad Producto</label>
+        <input type="number" value="{{ venta.cantidad }}" readonly>
+      </div>
+
+      <fieldset>
+        <legend>Nota para esta Orden</legend>
+        <textarea rows="3" cols="30" readonly>{{ venta.nota|default_if_none:"" }}</textarea>
+      </fieldset>
+
+      {% if venta.extras %}
+        <details><!-- SE PUEDE DEJAR open -->
+          <summary></summary> <!-- El texto está en CSS -->
+          {% for extra in venta.extras %}
+            <p class="titulo_extras">{{ extra.nombre }}</p>
+            <div class="extras_grid">
+              <label>(+${{ extra.precio }}) c/u</label>
+              <input type="number" min="0" value="{{ extra.cantidad }}" readonly>
+            </div>
+          {% endfor %}
+        </details>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="total">
+    <h4 class="total_general">
+      {% if metodo_pago == 'efectivo' %}
+        <h4 style="color:orangered">Total a pagar: ${{ pedido.total_pagado }} </h4> <h4 style="background:#00471b;color:white;border-radius:4px;margin-left:2px"> MXN</h4>
+      {% elif metodo_pago == 'habitacion' %}
+        <h4 style="color:blue">Total ${{ pedido.total_pagado }} </h4> <h4 style="background:#00471b;color:white;border-radius:4px;margin-left:2px"> MXN</h4>
+      {% else %}
+        <h4 style="color:orangered">Total pagado: ${{ pedido.total_pagado }} </h4> <h4 style="background:#00471b;color:white;border-radius:4px;margin-left:2px"> MXN</h4>
+      {% endif %}
+    </h4>
+  </div>
+
+  <div class="botones_pago_y_regresar">
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}">Ir al Panel</a>
+    {% else %}
+      <a href="{% url 'tienda' %}">Seguir comprando</a>
+    {% endif %}
+  </div>
+</form>
+
+<hr style="margin-top: 3em; margin-bottom: 2em;">
+
+<!-- SECCIÓN ACTUALIZADA PARA HOTEL -->
+{% if pedido.direccion.opcion_entrega == 'roomservice' %}
+  <h3 class="datos_envio_h3">Datos de Room Service</h3>
+{% else %}
+  <h3 class="datos_envio_h3">Datos para Recoger en Restaurante</h3>
+{% endif %}
+
+<div class="container_datos_envio">
+  {% if pedido.direccion.nombre_completo %}
+    <p><strong>Nombre completo:</strong> {{ pedido.direccion.nombre_completo }}</p>
+  {% endif %}
+  
+  {% if pedido.direccion.telefono %}
+    <p><strong>Teléfono:</strong> {{ pedido.direccion.telefono }}</p>
+  {% endif %}
+
+  {% if pedido.direccion.opcion_entrega_display %}
+    <p><strong>Tipo de servicio:</strong> {{ pedido.direccion.opcion_entrega_display }}</p>
+  {% endif %}
+
+  <!-- CAMPOS ESPECÍFICOS PARA HOTEL -->
+  {% if pedido.direccion.numero_habitacion %}
+    <p><strong>Número de habitación:</strong> {{ pedido.direccion.numero_habitacion }}</p>
+  {% endif %}
+
+
+
+  <!-- MÉTODO DE PAGO ACTUALIZADO -->
+  <p><strong>Método de pago:</strong> 
+    {% if metodo_pago == 'tarjeta' %}
+      Tarjeta de crédito/débito
+    {% elif metodo_pago == 'efectivo' %}
+      Efectivo al recibir
+    {% elif metodo_pago == 'habitacion' %}
+      Cargo a habitación
+    {% else %}
+      {{ metodo_pago }}
+    {% endif %}
+  </p>
+
+  {% if pedido.direccion.propina_voluntaria %}
+    <p><strong>Propina:</strong> ${{ pedido.direccion.propina_voluntaria }}</p>
+  {% endif %}
+
+  {% if pedido.direccion.decidir_propina_despues %}
+    <p><strong>Decidió dejar propina después:</strong> Sí</p>
+  {% endif %}
+
+  <!-- SIN COSTO DE ENVÍO PARA HOTEL -->
+  
+
+  {% if pedido.direccion.notas %}
+    <p><strong>Instrucciones especiales:</strong> {{ pedido.direccion.notas }}</p>
+  {% endif %}
+
+  <!-- MENSAJES ESPECÍFICOS PARA CADA TIPO DE SERVICIO -->
+  {% if pedido.direccion.opcion_entrega == 'roomservice' %}
+    <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; border-left: 4px solid #28a745;">
+      <p class="mensaje_envio" style="margin: 0; color: #155724;">
+        <strong>🏨 Room Service:</strong> Tu pedido será entregado directamente en tu habitación 
+        
+      </p>
+    </div>
+  {% else %}
+    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+      <p class="mensaje_envio" style="margin: 0; color: #856404;">
+        <strong>🍽️ Restaurante:</strong> Tu pedido estará listo para recoger en el restaurante. 
+        Te notificaremos cuando esté preparado.
+      </p>
+    </div>
+  {% endif %}
+
+</div>
+</div>
+
+{%else%}
+  </br>
+  </br>
+  </br>
+  <div class="botones_pago_y_regresar seguir_comprando">
+        <a href="{% url 'tienda' %}">Seguir comprando</a>
+    </div>
+{%endif%}
+
+{# ESTO ES PARA ASEGURARME QUE LIMPIE EL LOCAL STORAGE CUANDO PAGAN CON CASH TAMBIEN #}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    localStorage.removeItem("carrito_business_id");
+    console.log("LocalStorage limpiado después del pedido exitoso.");
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/swipers.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css'%}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+
+<div class="body">
+
+  <h2>Bienvenido, {{ profile.user.first_name }} ({{ profile.user.username }})</h2>
+
+  
+ 
+  <div class="menu-categorias">
+    <a href="{% url 'view_profile' %}">👤Mi Perfil</a> 
+    {% load custom_filters %}
+    {% for key, types in categories.items %}
+        <a  class="botones-categorias" href="?categoria={{ key }}" {% if selected_category == key %}{% endif %}>
+            {{ category_labels|get_item:key }}
+        </a>
+    {% endfor %}
+    <a class="botones-categorias" href="{% url 'dashboard' %}">Ver Todos</a>    
+    <a class="botones-categorias" href="{% url 'logout' %}">Cerrar Sesión</a>
+</div>
+     
+
+  
+
+  
+
+  {% if businesses %}
+  <ul>
+    {% for business in businesses %}
+      <li>
+        <strong class="title">{{ business.commercial_name }}</strong>
+
+        <!-- Swiper for images -->
+        <div class="swiper mySwiper-{{ business.id }}">
+            <div class="swiper-wrapper">
+                {% if business.image1 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image1.url }}" alt="Image 1" onclick="openLightbox('{{ business.image1.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image2 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image2.url }}" alt="Image 2" onclick="openLightbox('{{ business.image2.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image3 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image3.url }}" alt="Image 3" onclick="openLightbox('{{ business.image3.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image4 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image4.url }}" alt="Image 4" onclick="openLightbox('{{ business.image4.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image5 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image5.url }}" alt="Image 5" onclick="openLightbox('{{ business.image5.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image6 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image6.url }}" alt="Image 6" onclick="openLightbox('{{ business.image6.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image7 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image7.url }}" alt="Image 7" onclick="openLightbox('{{ business.image7.url }}')">
+                    </div>
+                {% endif %}
+                {% if business.image8 %}
+                    <div class="swiper-slide">
+                        <img src="{{ business.image8.url }}" alt="Image 8" onclick="openLightbox('{{ business.image8.url }}')">
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                {% endif %}
+                
+            </div>
+           
+        </div>
+        <details> 
+            <summary class="summary-info">Ver Detalles</summary>
+        <!-- Business Info Grid -->
+        <div class="business-info">
+            <div><em>Ciudad:</em> {{ business.get_city_display }}</div>
+            <div><em>Horario:</em> {{ business.opening_time|date:"H:i" }} A {{ business.closing_time|date:"H:i" }}</div>
+            <div><em>Días Cerrado:</em> {% if business.get_closed_days_display %}{{ business.get_closed_days_display|join:", " }}{% else %}Ninguno{% endif %}</div>
+            
+            <div><em>Tipo de Negocio:</em> {% if business.get_tipos_display %}{{ business.get_tipos_display|join:", " }}{% else %}No especificado{% endif %}</div>
+            <div><em>Público:</em> {{ business.get_audience_display }}</div>
+            <div><em>Gerente:</em> {{ business.manager_name }}</div>
+            <div><em>Contacto Gerente:</em> {{ business.owner_or_manager_whatsapp }}</div>
+            <div><em>Correo Gerente:</em> {{ business.owner_or_manager_email }}</div>
+            <div><em>Contacto Reservas:</em> {{ business.reservations_whatsapp }}</div>
+            <div><em>Correo Reservas:</em> {{ business.reservations_email }}</div>
+            <div><em>Promociones Actuales:</em> {{ business.current_promotions|default:"Ninguna" }}</div>
+            <div><em>Comisiones:</em> {{ business.commissions|default:"Ninguna" }}%</div>
+            <div><em>Espacios Disponibles:</em> {{ business.available_spaces }}</div>
+            <div><em>Dirección:</em> {{ business.address }}</div>
+            <div><em>Sitio Web:</em> <a href="{{ business.website }}" target="_blank">{{ business.website|default:"No disponible" }}</a></div>
+        </div>
+    
+    
+        <div class="div-descripcion"><em>Descripción:</em> <p>{{ business.description|truncatewords:25 }}</p></div>
+
+        
+
+    </details>   
+    <div class="botones-reservar carrito">
+        <a class="reservar"href="{% url 'editar_negocio' business.id %}">Reservar</a> 
+        <a href="{% url 'edit_profile' %}"> <img class="carrito-icon" src="{%static '/images/carrito.png'%}">Mi carrito</a>
+        </div>
+    </li>
+       
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Aún no se ha agregado ningún negocio.</p>
+{% endif %}
+
+
+<!-- ESTOS SON PARTE DEL SWIPER Y OPEN MODAL JUNTO CON : <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> QUE SE PONE EN HEAD -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+  <span  class="close" onclick="closeLightbox()">✖</span>
+  <span  class="prev" onclick="changeLightbox(-1, event)">&#10094; </span>
+  <span class="next" onclick="changeLightbox(1, event)">&#10095;</span>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script  src="{% static '/js/swipers.js'%}"></script>
+
+
+</div><!-- ############ CIERRE DIV BODY-->
+
+
+    <footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+</body>
+</html>

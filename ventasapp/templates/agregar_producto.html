@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{% if editing %}Editar Producto{% else %}Agregar Producto{% endif %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'css/agregar_producto.css' %}">
+</head>
+<body>
+  <div class="container">
+    {% block content %}
+      <h2>{% if editing %}Editar Producto{% else %}Agregar producto al menú de  {{ business.commercial_name }}{% endif %}</h2>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">{% if editing %}Guardar Cambios{% else %}Guardar Producto{% endif %}</button>
+      </form>
+
+      <a href="{% url 'dashboard' %}">← Volver al negocio</a>
+    {% endblock %}
+  </div>
+
+
+  {%comment%}
+
+  <script src="{% static 'js/categorias_de_negocios.js'%}"></script>
+  <div class="container">
+    {% block content %}
+        <h2>{% if editing %}Editar Producto{% else %}Agregar producto al menú de {{ business.commercial_name }}{% endif %}</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Display any form errors -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Display the form fields -->
+            {{ form.as_p }}
+
+            <!-- Optional: Category selection if needed -->
+            <div class="form-group">
+                <label for="id_categoria">Categoría</label>
+                <select name="categoria" id="id_categoria">
+                    <option value="hoteles">Hoteles</option>
+                    <option value="resorts_todo_incluido">Resorts Todo Incluido</option>
+                    <option value="resorts_solo_adultos">Resorts Solo Adultos</option>
+                    <option value="resorts_familiares">Resorts Familiares</option>
+                    <option value="resorts_boutique">Resorts Boutique</option>
+                    <option value="hostales">Hostales</option>
+                    <option value="departamentos_vacacionales">Departamentos Vacacionales</option>
+                    <option value="casas_en_renta">Casas en Renta</option>
+                    <option value="venta_bienes_raices">Venta Bienes Raíces</option>
+                    <option value="property_management">Property Management</option>
+                </select>
+            </div>
+
+            <button type="submit">{% if editing %}Guardar Cambios{% else %}Guardar Producto{% endif %}</button>
+        </form>
+
+        <a href="{% url 'dashboard' %}">← Volver al negocio</a>
+    {% endblock %}
+</div>
+{%endcomment%}
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <!-- Meta SEO -->
+<title>SABOR LOCAL Puerto Vallarta | Ahorra hasta 40% </title>
+<meta name="description" content="Desde fondas hasta restaurantes destacados. En SABOR LOCAL encuentras comida, farmacias, regalos y más con precios más bajos que en otras apps. Sin publicidad molesta, compra fácil, clara y rápida.">
+<meta name="keywords" content="Puerto Vallarta, negocios locales, restaurantes económicos, fondas, comida rápida, farmacias, tiendas de conveniencia, regalos, floristerías, entrega a domicilio, comprar barato, apoyar comercio local, sin publicidad, mejores precios, Sabor Local, fácil de usar">
+<meta name="author" content="SABOR LOCAL Puerto Vallarta">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="SABOR LOCAL Puerto Vallarta | Compra Local, Paga Menos | Ahorra hasta 40% comprando aqui">
+<meta property="og:description" content="Desde fondas hasta restaurantes top. Precios más bajos gracias a comisiones mínimas. Sin publicidad, sin complicaciones: ve, paga y recibe en casa.">
+<meta property="og:url" content="https://saborlocalpv.com/">
+<meta property="og:image" content="https://saborlocalpv.com{% static 'images/og_image.png' %}">
+
+
+<link rel="apple-touch-icon" href="{%static 'images/apple-touch-icon.png'%}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SaborLocal">
+<meta name="application-name" content="Sabor Local">{#andoid#}
+
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+<meta property="og:site_name" content="SABOR LOCAL PV">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SABOR LOCAL Puerto Vallarta | Restaurantes, Precios Bajos y Entrega Rápida">
+<meta name="twitter:description" content="Desde fondas hasta restaurantes destacados. Pide fácil, sin anuncios. Mejores precios que en otras apps. Apoya negocios locales en Puerto Vallarta.">
+<meta name="twitter:image" content="https://saborlocalpv.com{% static 'images/logo.png' %}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com/">
+
+<!-- Favicon -->
+
+
+{############################### FIN META TAGS ###################################}
+
+{#Cuando decimos "real", nos referimos a que estás apoyando negocios reales, locales y auténticos de Puerto Vallarta. Nada de cadenas impersonales ni intermediarios. Son personas de la comunidad, con productos verdaderos, hechos con esfuerzo y corazón.Es comida real, servicio real, comercio real… como debe ser.#}
+  
+
+<!-- Stylesheets -->
+  <link rel="stylesheet" href="{% static 'css/dashboard2.css' %}">
+  <link rel="stylesheet" href="{% static '/css/headers.css' %}">
+  <link rel="stylesheet" href="{% static '/css/swipers2.css' %}">
+  <link rel="stylesheet" href="{% static '/css/footers.css' %}">
+  <link rel="stylesheet" href="{% static 'fuentes/fuentes.css'%}"><!--ESTO ES PARA CARGAR FUENTES NUEVAS-->
+
+ <!-- ESTO ES PARA PASAR LAS FOTOS  -->
+ <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+ <!-- ESTO ES PARA PASAR LAS FOTOS TAMBIEN -->
+ <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+ 
+
+
+</head>
+<body>
+
+
+<header class="header">
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+
+<div class="body">
+{%if user.is_authenticated%}
+  <h2>Bienvenido, {{ profile.user.first_name }} ({{ profile.user.username }})</h2>
+  {%else%}
+  <h1>Sabor local Puerto Vallarta </h1>
+
+  
+{%endif%}
+
+  {% load custom_filters %}
+
+<div class="product-types menu-categorias">
+  {%if user.is_authenticated%}
+  <a  href="{% url 'view_profile' %}" class="botones-categorias mi-perfil">👤 Administrar mi Perfil</a> 
+  {%endif%}
+   <a class="botones-categorias" href="{% url 'index' %}">iniciar sesión</a>
+  {% for key, types in categories.items %}
+    <a class="botones-categorias" href="?categoria={{ key }}">
+      {{ category_labels|get_item:key }}
+    </a>
+  {% endfor %}
+  
+ 
+  {%if user.is_authenticated%}
+  <a class="botones-categorias" href="{% url 'dashboard' %}">Ver Todos</a>
+  {%else%}
+  <a class="botones-categorias" href="{% url 'tienda' %}">Ver Todos</a>
+  {%endif%}
+  <a class="botones-categorias" href="{% url 'ver_carrito' %}">Ver Carrito</a>
+  {%if user.is_authenticated%}
+  <a  style="background-color:transparent; color:#2d2d2d"class="botones-categorias" href="{% url 'logout' %}">Cerrar Sesión</a>
+  {%endif%}
+ 
+
+
+</div>
+{#BUSCADOR EN TIEMPO REAL , NO NECESITÉ UNA VIEW PARA ESTO, simplemente lo hice con la clase del titulo ###############}
+
+<div class="input-wrapper">
+  <input type="text" id="buscador" class="typing-input" placeholder=" " autocomplete="off">
+  <label for="buscador" class="typing-label">Buscar negocios...</label>
+</div>
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("buscador");
+
+    // Buscador en tiempo real
+    input.addEventListener("input", function () {
+      const filtro = input.value.toLowerCase();
+      const productos = document.querySelectorAll(".product");
+
+      productos.forEach(function (producto) {
+        const titulo = producto.querySelector(".title").textContent.toLowerCase();
+        producto.style.display = titulo.includes(filtro) ? "" : "none";
+      });
+
+      document.querySelectorAll(".category-section").forEach(function (section) {
+        const visibles = section.querySelectorAll(".product:not([style*='display: none'])");
+        section.style.display = visibles.length > 0 ? "" : "none";
+      });
+    });
+  });
+</script>
+
+
+{############################# FIN DE BUSCADOR ###########################################}
+
+{% if businesses %}
+  {% for category_key, category_name in category_labels.items %}
+    {% with categories|get_item:category_key as type_list %}
+      {% with type_list|pluck:0 as type_codes %}
+        {% with businesses|dictfilterbytypes:type_codes as category_businesses %}
+          {% if category_businesses %}
+            <div class="category-section">
+              <h2>{{ category_name }}</h2>
+              <div class="product-grid">
+                {% for business in category_businesses %}
+                  <div class="product">
+                    <h3 class="title">{{ business.commercial_name }}</h3>
+
+                      {% if business.is_open_now %}
+                      {%comment%}
+                      <span class="abierto">Abierto<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+                      {%endcomment%}
+                      {% else %}
+                          <span class="cerrado">Cerrado<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+                      {% endif %}
+
+                    <div class="swiper swiper-container mySwiper-{{ business.id }}">
+                      <div class="swiper-wrapper">
+                        {% if business.image1 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image1.url }}" alt="Image 1" onclick="openLightbox('{{ business.image1.url }}')">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image2 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image2.url }}" alt="Image 2">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image3 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image3.url }}" alt="Image 3">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image4 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image4.url }}" alt="Image 4">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image5 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image5.url }}" alt="Image 5">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image6 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image6.url }}" alt="Image 6">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image7 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image7.url }}" alt="Image 7">
+                            </a>
+                          </div>
+                        {% endif %}
+                        {% if business.image8 %}
+                          <div class="swiper-slide">
+                            <a href="{% url 'business_detail' business.id %}">
+                              <img src="{{ business.image8.url }}" alt="Image 8">
+                            </a>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="swiper-button-next"></div>
+                      <div class="swiper-button-prev"></div>
+                    </div>
+
+                    <div class="botones-reservar carrito">
+                      
+                      <a href="{% url 'business_detail' business.id %}">Ver Detalles</a> 
+                      <a href="{% url 'menu' business_id=business.id %}">{%if business.tipos_de_negocio == 'restaurantes_formales' or business.tipos_de_negocio == 'comida_rapida' or business.tipos_de_negocio == 'fondas_locales' or   business.tipos_de_negocio == 'cafeterias' or   business.tipos_de_negocio == 'panaderias_reposterias' or   business.tipos_de_negocio == 'food_trucks' or   business.tipos_de_negocio == 'tiendas_helados_postres' or   business.tipos_de_negocio == 'tiendas_saludables' or   business.tipos_de_negocio == 'comida_vegana' %}Menú {%elif business.tipos_de_negocio == 'licorerias' or business.tipos_de_negocio == 'tiendas_locales_de_abarrotes' or business.tipos_de_negocio == 'medicamentos' or business.tipos_de_negocio == 'tiendas_de_flores' or business.tipos_de_negocio == 'tiendas_de_regalos' %} Productos {%endif%}</a> 
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+      {% endwith %}
+    {% endwith %}
+  {% endfor %}
+{% else %}
+  <p class="no-business">Aún no se ha agregado ningún negocio.</p>
+{% endif %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+  document.querySelectorAll('.swiper-container').forEach((container) => {
+    new Swiper(container, {
+      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 10,
+      effect: 'fade', // 👈 Efecto de desvanecimiento
+      fadeEffect: {
+        crossFade: true, // 👈 Hace que la transición se vea más fluida
+      },
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: container.querySelector('.swiper-button-next'),
+        prevEl: container.querySelector('.swiper-button-prev'),
+      },
+    });
+  });
+</script>
+
+
+  
+
+</div> <!-- Close body -->
+
+{# BOTON CARRITO FIXED#}
+{%if items_carrito %}
+<div class="ver_carrito_fixed">
+<a  href="{% url 'ver_carrito' %}"><img src="{%static 'images/bolsa.png' %}"> <h3>{{items_carrito}}<sup>*</sup></h3></a> 
+</div>
+{%endif%}
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+
+</body>
+</html>
+

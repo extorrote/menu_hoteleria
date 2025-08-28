@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Negocio</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/estilos_crear_negocio.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/headers.css' %}">
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Datos Generales -->
+        <fieldset>
+            <legend>Información del negocio</legend>
+
+            <label for="{{ form.commercial_name.id_for_label }}">Nombre comercial</label>
+            {{ form.commercial_name }}
+
+            <label for="{{ form.tipos_de_negocio.id_for_label }}">Tipo de Negocio (Giro)</label>
+            {{ form.tipos_de_negocio }}
+
+            <label for="{{ form.time_category.id_for_label }}">Horario principal</label>
+            {{ form.time_category }}
+
+            <label for="{{ form.opening_time.id_for_label }}">Hora de apertura</label>
+            {{ form.opening_time }}
+
+            <label for="{{ form.closing_time.id_for_label }}">Hora de cierre</label>
+            {{ form.closing_time }}
+
+            <label for="{{ form.closed_days.id_for_label }}">Días cerrados</label>
+            <small>{{ form.closed_days.help_text }}</small>
+
+            <div class="closed-days-row">
+                {% for checkbox in form.closed_days %}
+                    <label class="closed-day-option">{{ checkbox.tag }} {{ checkbox.choice_label }}</label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <!-- Contacto del negocio -->
+        <fieldset>
+            <legend>Contacto general</legend>
+
+            <label for="{{ form.manager_name.id_for_label }}">Responsable o gerente</label>
+            {{ form.manager_name }}
+
+            <label for="{{ form.owner_or_manager_whatsapp.id_for_label }}">WhatsApp del responsable</label>
+            {{ form.owner_or_manager_whatsapp }}
+
+            <label for="{{ form.owner_or_manager_email.id_for_label }}">Correo del responsable</label>
+            {{ form.owner_or_manager_email }}
+        </fieldset>
+
+        <!-- Contacto para reservaciones -->
+        <fieldset>
+            <legend>Contacto para reservaciones</legend>
+
+            <label for="{{ form.reservations_contact_name.id_for_label }}">Nombre de contacto</label>
+            {{ form.reservations_contact_name }}
+
+            <label for="{{ form.reservations_whatsapp.id_for_label }}">WhatsApp de reservaciones</label>
+            {{ form.reservations_whatsapp }}
+
+            <label for="{{ form.reservations_email.id_for_label }}">Correo de reservaciones</label>
+            {{ form.reservations_email }}
+        </fieldset>
+
+        <!-- Promociones y Comisiones -->
+        <fieldset>
+            <legend>Extras</legend>
+
+            <label for="{{ form.current_promotions.id_for_label }}">Promociones actuales</label>
+            {{ form.current_promotions }}
+
+              <label for="{{ form.acepta_tarjeta.id_for_label }}">Acepta pagos con tarjeta?</label>
+            {{ form.acepta_tarjeta }}
+
+              <label for="{{ form.acepta_efectivo.id_for_label }}">Acepta pagos en efectivo?</label>
+            {{ form.acepta_efectivo }}
+
+          
+        </fieldset>
+
+        <!-- Imágenes -->
+        <fieldset>
+            <legend>Multimedia</legend>
+            <p>Imágenes:</p>
+            {{ form.image1 }}
+            {{ form.image2 }}
+            {{ form.image3 }}
+            {{ form.image4 }}
+        </fieldset>
+        
+        <!-- Ubicación y descripción -->
+        <fieldset>
+            <legend>Ubicación y descripción</legend>
+
+            <label for="{{ form.address.id_for_label }}">Dirección</label>
+            {{ form.address }}
+            
+
+            
+            
+            <label for="{{ form.website.id_for_label }}">Sitio web</label>
+            {{ form.website }}
+
+            
+
+            <label for="{{ form.google_maps.id_for_label }}">Locación en Google Maps (iframe)</label>
+            {{ form.google_maps }}
+
+            <label for="{{ form.description.id_for_label }}">Descripción del negocio</label>
+            {{ form.description }}
+        </fieldset>
+
+        <!-- Capacidad -->
+
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <a class="boton-regresar" href="{% url 'dashboard' %}">Regresar</a>
+</body>
+</html>

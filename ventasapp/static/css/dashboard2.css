@@ -1,0 +1,663 @@
+/* Global Styles */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+/* Main Container */
+.body {
+  max-width: 1000px;
+  margin:30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+h1{
+  width:100%;
+  letter-spacing: 4px;
+  display:flex;
+  margin:20px auto;
+  font-size: 18px;
+  justify-content: center;
+  align-items: center;
+  font-family: "titulo_tipo_pelicula";
+  text-transform: uppercase;
+  text-align: center;
+}
+@media screen and (max-width:768px){
+  h1{font-size: 10px;
+    width:98%;
+    
+  }
+}
+.category-section h2{
+  width:100%;
+  display:flex;
+  
+  margin:10px;
+  
+  color:#00471b;
+}
+/*################ buscador */
+/* Efecto de escritura */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 20px auto;
+}
+.buscador_tienda{
+ 
+  width:50%;
+  margin-top: 30px;
+}
+@media screen and (max-width:768px){
+  .buscador_tienda{
+    width:90%;
+  }
+}
+.typing-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+/* Label animado */
+.typing-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #888;
+  pointer-events: none;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid black;
+  animation: typing 2.5s steps(20, end), blink 0.7s step-end infinite;
+}
+
+/* OCULTAR label cuando el input tiene focus (aunque esté vacío o lleno) */
+.typing-input:focus + .typing-label {
+  display: none;
+}
+
+/* Animaciones */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 20ch }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+
+
+/*####################################### */
+
+
+/* ############# GRID INFO  */
+.business-info {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 5px;
+  
+}
+
+.business-info div {
+  max-width: 900px;
+  width:100%;
+  background-color: #f9f9f9;
+  display:flex;
+  margin:auto;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.div-descripcion{
+  max-width: 1000px;
+  min-height: 50px;
+  height:100%;
+  width:100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display:flex;
+  flex-direction: column;
+  margin:15px auto;
+  justify-content: center;
+  align-items: center;
+}
+.div-descripcion em{
+  font-size: 20px;
+  font-weight: 600;
+  font-weight: 400;
+}
+.div-descripcion p{
+  display:flex;
+  margin:auto;
+text-align: center;
+}
+
+.business-info div em{
+  margin: 0 8px ;
+}
+.business-info em {
+  font-weight: bold;
+ 
+}
+
+.business-info a {
+  text-decoration: none;
+  color: green;
+}
+
+.business-info a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Layout */
+@media screen and (max-width: 768px) {
+  .business-info {
+      grid-template-columns: 1fr;
+  }
+
+  .business-info div {
+      margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .business-info {
+      padding: 10px;
+  }
+
+  .business-info div {
+      padding: 10px;
+  }
+}
+
+/* ####################################################33FIN GRID IINFO #################33*/
+
+/* Typography */
+
+
+
+p {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+.title{
+  width:100%;
+  font-size: 15px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display:flex;
+  margin:0 auto;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  
+  color:#00471b;
+  
+}
+/* Business List */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.product-grid {
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.product-grid:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.01);
+}
+
+.product-grid img {
+  display:flex;
+  margin:auto;
+  max-width: 900px;
+  width:100%;
+ height:400px;
+ object-fit: cover;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Links */
+a {
+  color: #00471b;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+
+a:hover {
+  color: #b4975a;
+}
+
+
+.menu-categorias {
+  max-width: 1000px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  
+}
+
+.botones-categorias {/* ESTOS SON LOS BOTONES DEL MENU*/ 
+  flex: 1 1 150px; /* Flex-grow, shrink, basis for responsiveness */
+  max-width: 300px;
+  font-size: 20px;
+  background-color: #00471b;
+  color: #fff;
+  height: 40px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 10px  0 10px 0;
+}
+.botones-categorias:hover{
+  background-color: #b4975a;
+  color:white;
+}
+.mi-perfil{
+  background-color: transparent;
+  color:#00471b;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .botones-categorias {
+    flex: 1 1 100%;
+    font-size: 13px;
+  }
+
+  .menu-categorias {
+    padding: 5px;
+  }
+}
+
+
+/* Button-style Links */
+a[href*="crear_negocio"],
+a[href*="editar_negocio"],
+a[href*="delete_business"],
+a[href*="edit_profile"],
+a[href*="logout"] {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 5px ;
+  background-color: #00471b;
+  color: #fff;
+  border-radius: 5px;
+  text-align: center;
+}
+
+a[href*="crear_negocio"]:hover,
+a[href*="editar_negocio"]:hover,
+a[href*="delete_business"]:hover,
+a[href*="edit_profile"]:hover,
+a[href*="logout"]:hover {
+  background-color: #b4975a;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  
+
+  .body {
+    padding: 15px;
+  }
+
+  li {
+    font-size: 0.95rem;
+  }
+
+  a[href*="crear_negocio"],
+  a[href*="editar_negocio"],
+  a[href*="delete_business"],
+  a[href*="edit_profile"],
+  a[href*="logout"] {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.abierto,.cerrado{
+  max-width:90px;
+  width:100%;
+  height:22px;
+  display:flex;
+  margin:auto;
+  background-color: red;
+  color:white;
+  justify-content: center;
+  align-items: center;
+  border-radius:5px  ;
+  font-size: 17px;
+
+  margin-top: 10px;
+  }
+  .abierto{
+    background-color: #00471b;
+  }
+
+
+.product-details strong{
+  text-transform: uppercase;
+  font-size: 11px;
+  text-decoration: underline;
+  font-family:"chidita_rara" ;
+}
+.product-details em{
+  font-size: 12px;
+  font-family:"chidita_rara" ;
+  font-family: "estetica_mayuscula";
+}
+
+
+.menu_bacio{
+  width:100%;
+  height:40px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin:20px auto;
+  
+}
+
+
+/* ###### ESTOS SON LOS ESTILOS PARA LA ADICION EXTRA QUE LE AGREGUE AL MENU , MARK TOLD ME ##*/
+.add-to-cart-form{
+  
+  width:100%;
+  height:auto;
+  
+}
+.nota-producto fieldset{
+  width:95%;
+  display:flex;
+  margin:auto;
+  margin-bottom: 10px;
+  border-width:2px;
+  border-radius: 10px;
+}
+textarea {
+  width: 100%;
+  border:none;
+  
+}
+textarea:focus{
+  outline: none;
+}
+textarea::placeholder {
+  font-size: 12px;
+  text-align: center;
+  
+}
+.add-to-cart-form .add-to-cart-form details {
+  cursor: pointer;
+  
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.details_extras_tienda{
+  animation: pulse 6s 1s infinite;
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-bottom:10px;
+  cursor: pointer;
+  
+}
+.details_extras_tienda summary{
+
+  font-weight: 600;
+
+}
+
+.details_extras_tienda[open]{
+  animation:none;
+  
+}
+.extras_label_y_precio{
+  text-transform: capitalize;
+  font-size: 13px;
+}
+
+.add-to-cart-form .boton_agregar_carrito{
+  width:95%;
+  height:35px;
+  border: none;
+  border-radius: 5px  ;
+  background-color: #ff5c00;
+  background-color: #f7a800;
+  display: flex;
+  margin:auto;
+  margin-bottom: 5px;
+  justify-content: center;
+  align-items: center;
+  color:#fff;
+  cursor:pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 10px;
+}
+
+.add-to-cart-form .boton_agregar_carrito:hover{
+  background-color: green;
+}
+
+@media screen and (max-width:960px){
+  .add-to-cart-form .boton_agregar_carrito{
+    font-size: .6rem;
+  }
+}
+/*################### CODIGO PARA LOS BOTONES CANTIDAD */
+.number-input {/*ESTE ES EL CONTAINERSITO QUE CONTIENE LOS + - Y INPUT NUMERO*/
+  display: flex;
+  align-items: center;
+  
+  justify-content: center;
+  margin: 5px;
+  
+}
+
+.number-input input {/*ESTE ES EL DEL NUMERO */
+  max-width: 50px;
+  width:100%;
+  height: 30px;
+  text-align: center;
+  font-size: 16px; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f9f9f9;
+  
+}
+
+.number-input input, .number-input button{
+  margin-right:4px;
+}
+.number-input button {/*ESTOS SON LOS DIVS QUE CONTIENEN EL + Y -  */
+  max-width: 50px;
+  width:100%;
+  height: 30px;
+  color: green;
+  border: none;
+  font-size: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  
+}
+
+
+.minus{
+  color:orangered!important;
+}
+.number-input button:active {
+  background-color: #6e4f29;
+}
+
+/* Para Chrome, Safari, Edge */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  opacity: 0; /* Lo hace transparente */
+  pointer-events: none; /* Opcional: para que no se pueda clicar */
+}
+
+/* Para Firefox */
+input[type=number] {
+  -moz-appearance: textfield; /* Oculta los botones */
+}
+
+
+@media screen and (max-width:441px){
+  .number-input input{
+    max-width: 100px;    
+  }
+  .number-input input, .number-input button{
+    margin: 10px;
+  }
+}
+
+
+.ver_carrito_fixed {
+  box-sizing: border-box;
+  max-width: 40px;
+  width: 100%;
+  height: 50px;
+  
+  position: fixed; /* Ahora es fijo en la pantalla */
+  top: 57%;         /* Posicionado verticalmente al 50% */
+  left: 0;         /* Pegado al borde derecho */
+  transform: translateY(-50%); /* Centrado verticalmente */
+  overflow: hidden;
+  z-index: 999; /* Asegura que esté encima de otros elementos */
+  
+}
+
+.ver_carrito_fixed img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  
+}
+
+
+
+.ver_carrito_fixed h3 {
+  position: absolute;
+  top: 43%;
+  left: 25%;
+  width:20px;
+  height:40%;
+ 
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+ 
+  font-size: 14px;
+  text-align: center;
+  pointer-events: none;
+  
+  color:#00471b;
+  font-family:monospace;
+  animation: pulse 1s 3s infinite;
+  
+}
+
+@keyframes yeyyey {
+  100% { margin-right: -10px }
+  50% { margin-left: 5px }
+
+  40%{
+    margin-left: 10px;
+  }
+}
+.boton_regresar_fixed{
+  top:64%;
+  background-color: #00471b;
+  height:40px;
+  border-radius: 50%;
+  
+}
+
+.boton_regresar_fixed svg{
+  animation: yeyyey 3s 3s infinite;
+}
+

@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <!-- Meta SEO dinámico para detalles del negocio -->
+<title>{{ business.commercial_name }} {#{{ business.get_city_display }}#} {#{{ business.get_tipos_display }}#} Compra en sabor local con precios Más Bajos y entrega a domicilio</title>
+<meta name="description" content="{{ business.commercial_name }} Compra por Sabor Local y obtén precios más bajos porque aquí los negocios pagan menos comisiones. Fácil, rápido y sin publicidad.">
+<meta name="keywords" content="{{ business.commercial_name }},negocios locales Puerto Vallarta, promociones locales, precios bajos, pagar menos, comprar directo, menos comisiones, más barato que otras apps, Sabor Local, comercio justo, entrega a domicilio, apoyar negocios locales, comida económica, productos locales baratos">
+<meta name="author" content="{{ business.commercial_name }} a través de Sabor Local">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+<meta property="og:type" content="business.business">
+<meta property="og:title" content="{{ business.commercial_name }} | {{ business.get_tipos_display }} en {{ business.get_city_display }} con precios más bajos">
+<meta property="og:description" content="{{ business.description|truncatechars:160 }} Compra por Sabor Local y ahorra: menos comisiones = precios más bajos.">
+<meta property="og:url" content="https://saborlocalpv.com{% url 'business_detail' business.id %}">
+<meta property="og:image" content="https://saborlocalpv.com{{ business.image1.url }}">
+<link rel="icon" href="{% static 'images/logo.ico' %}" type="image/x-icon">
+<meta property="og:site_name" content="Sabor Local PV">
+<meta property="og:locale" content="es_MX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ business.commercial_name }} en {{ business.get_city_display }} | {{ business.get_tipos_display }} con mejores precios">
+<meta name="twitter:description" content="Compra fácil y directo. En Sabor Local los negocios pagan menos comisiones, por eso tú pagas menos. {{ business.description|truncatechars:100 }}">
+<meta name="twitter:image" content="https://saborlocalpv.com{{ business.image1.url }}">
+<meta name="twitter:site" content="@saborlocalpv">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://saborlocalpv.com{% url 'business_detail' business.id %}">
+
+
+{########################################## FIN META TAGS #######################################}
+  <title>{{ business.commercial_name }} - Detalles</title>
+  <link rel="stylesheet" href="{% static 'css/dashboard_business_y_details.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/headers.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/swipers.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/footers.css'%}">
+
+
+  <link rel="stylesheet" href="{%static '/fuentes/fuentes.css'%}"><!--ESTO ES PARA CARGAR FUENTES NUEVAS-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/><!--swiper-->
+
+  <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="{% static 'images/logo.png' %}" alt="Logo">
+  </div>
+</header>
+
+<div class="body">
+  <ul class="product-grid">
+      <!-- Swiper Container -->
+      <li class="product">
+  <h1 class="title">{{ business.commercial_name }}</h1>
+
+  {% if business.is_open_now %}
+                      {%comment%}
+                      <span class="abierto">Abierto<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+                      {%endcomment%}
+                      {% else %}
+                          <span class="cerrado">Cerrado<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="white"><path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/></svg></span>
+                      {% endif %}
+  <!-- Swiper Container -->
+  <div class="swiper swiper-container mySwiper-{{ business.id }}">
+    <div class="swiper-wrapper">
+      {% if business.image1 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image1.url }}" onclick="openLightbox('{{ business.image1.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image2 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image2.url }}" onclick="openLightbox('{{ business.image2.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image3 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image3.url }}" onclick="openLightbox('{{ business.image3.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image4 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image4.url }}" onclick="openLightbox('{{ business.image4.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image5 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image5.url }}" onclick="openLightbox('{{ business.image5.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image6 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image6.url }}" onclick="openLightbox('{{ business.image6.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image7 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image7.url }}" onclick="openLightbox('{{ business.image7.url }}', this)">
+        </div>
+      {% endif %}
+      {% if business.image8 %}
+        <div class="swiper-slide">
+          <img src="{{ business.image8.url }}" onclick="openLightbox('{{ business.image8.url }}', this)">
+        </div>
+      {% endif %}
+    </div>
+
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+<details>
+  <summary>Ver información general</summary>
+      <!-- Business Info -->
+      <div class="business-info">
+        <div><em>Ciudad:</em> {{ business.get_city_display }}</div>
+        <div><em>Horarios:</em> {{ business.opening_time|date:"H:i" }} A {{ business.closing_time|date:"H:i" }}</div>
+        <div><em>Días Cerrado:</em> {{ business.get_closed_days_display|default:"Ninguno" }}</div>
+              {%if business.tipos_de_negocio == 'restaurantes_formales'%}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Restaurante Formal</div>
+              {%elif business.tipos_de_negocio == 'comida_rapida' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Comida Rapida </div>
+              {%elif business.tipos_de_negocio == 'fondas_locales' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Comida Casera </div>
+              {%elif business.tipos_de_negocio == 'cafeterias' %} 
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Cafeteria </div>
+              {%elif business.tipos_de_negocio == 'panaderias_reposterias' %} 
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Panadería / Pasteleria </div>
+              {%elif business.tipos_de_negocio == 'food_trucks' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Food Truck </div>
+              {%elif business.tipos_de_negocio == 'licorerias' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Licoreria </div>
+              {%elif business.tipos_de_negocio == 'tiendas_helados_postres' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>  Heladeria y Postres </div>
+              {%elif business.tipos_de_negocio == 'tiendas_saludables' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>Comida Saludable o Vegana</div>
+              {%elif business.tipos_de_negocio == 'tiendas_locales_de_abarrotes' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>Tienda Local de Abarrotes</div>
+              {%elif business.tipos_de_negocio == 'medicamentos' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>Productos Farmacéuticos</div>
+              {%elif business.tipos_de_negocio == 'tiendas_de_flores' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>Floreria</div>
+              {%elif business.tipos_de_negocio == 'tiendas_de_regalos' %}
+              <div class="tipo_de_negocio"><em>Tipo de Negocio:</em>Tienda de Regalos</div>
+             {%endif%}
+        <div><em>Contacto:</em> {{ business.reservations_whatsapp }} <a href="https://wa.me/{{ business.reservations_whatsapp }}" class="social-icon whatsapp whatsapp-details-section"></a></div>
+        <div><em>Email:</em> {{ business.reservations_email }}</div>
+        <div class="tipo_de_negocio"><em>Promociones Actuales:</em> {{ business.current_promotions|default:"Ninguna" }}</div>
+        <div class="tipo_de_negocio"><em>Dirección:</em> {{ business.address }}</div>
+        {#<div><em>Sitio Web:</em> <a href="{{ business.website }}" target="_blank">{{ business.website|default:"No disponible" }}</a></div>#}
+      </div>
+    </details>
+      <div class="div-descripcion">
+        <em>Descripción:</em>
+        <p>{{ business.description }}</p>
+      </div>
+
+
+        {% if business.google_maps %}
+        <div class="google_maps"> {{business.google_maps|safe}}</div>
+        {%endif%}
+
+      <div class="botones-reservar carrito">  
+                  <a href="{% url 'tienda' %}">Regresar</a>                           
+                  <a href="{% url 'menu' business_id=business.id %}">{%if business.tipos_de_negocio == 'restaurantes_formales' or business.tipos_de_negocio == 'comida_rapida' or business.tipos_de_negocio == 'fondas_locales' or   business.tipos_de_negocio == 'cafeterias' or   business.tipos_de_negocio == 'panaderias_reposterias' or   business.tipos_de_negocio == 'food_trucks' or   business.tipos_de_negocio == 'tiendas_helados_postres' or   business.tipos_de_negocio == 'tiendas_saludables' or   business.tipos_de_negocio == 'comida_vegana' %}Menú {%elif business.tipos_de_negocio == 'licorerias' or business.tipos_de_negocio == 'tiendas_locales_de_abarrotes' or business.tipos_de_negocio == 'medicamentos' or business.tipos_de_negocio == 'tiendas_de_flores' or business.tipos_de_negocio == 'tiendas_de_regalos' %} Productos {%endif%}</a> 
+
+       
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ESTO ES PARA EL OPEN MODAL, JUNTO CON EL CODIGO JS swipers.js -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+  <span class="close" onclick="closeLightbox()">✖</span>
+  <span class="prev" onclick="changeLightbox(-1, event)">&#10094;</span>
+  <span class="next" onclick="changeLightbox(1, event)">&#10095;</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><!--ESTE ES PARA PASAR LAS FOTOS ANTES DE ABRIR EL MODAL-->
+<script src="{% static '/js/swipers.js' %}"></script>
+<!--###################################################################################-->
+
+
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="{%url 'politica_de_privacidad'%}">Politica de Privacidad</a> |
+    <a href="{%url 'terminos_y_condiciones'%}">Terminos y Condiciones</a>
+  
+  </div>
+  <p>&copy; 2025 Sabor Local. Todos los Derechos Reservados.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,535 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="{% static 'css/headers.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/agregar_producto.css' %}" />
+</head>
+<body>
+<div class="container">
+  <h2 class="h2_envios">Información del pedido - Hotel Room Service</h2>
+
+  <!-- PANEL DE DATOS GUARDADOS DEL CLIENTE -->
+  <div id="datos-guardados" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: none;">
+    <h4 style="margin-top: 0; color: #495057;">🏨 Datos guardados del cliente</h4>
+    <div id="lista-datos-cliente"></div>
+    <button type="button" id="nuevos-datos-btn" style="margin-top: 10px; padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      ➕ Usar nuevos datos
+    </button>
+  </div>
+
+  <form method="post" id="direccion-form">
+    {% csrf_token %}
+
+    <!-- OPCIÓN DE ENTREGA PARA HOTEL -->
+    <p>
+      {{ form.opcion_entrega.label_tag }}
+      {{ form.opcion_entrega }}
+    </p>
+
+    <!-- INFORMACIÓN BÁSICA DEL HUÉSPED -->
+    <p>
+      {{ form.nombre_completo.label_tag }}
+      {{ form.nombre_completo }}
+    </p>
+
+    <p>
+      {{ form.telefono.label_tag }}
+      {{ form.telefono }}
+    </p>
+
+    <!-- CAMPOS ESPECÍFICOS PARA HOTEL -->
+    <div id="hotel-fields">
+      <p id="habitacion-container">
+        <label for="id_numero_habitacion">Número de habitación <span style="color: red;">*</span></label>
+        {{ form.numero_habitacion }}
+      </p>
+    </div>
+
+    <!-- PROPINA -->
+    <div class="grid_datos_envio">
+      <p id="propina-container">
+        {{ form.propina_voluntaria.label_tag }} <strong>MXN</strong> <span style="color: #666; font-size: 12px;">(Opcional)</span>
+        {{ form.propina_voluntaria }}
+      </p>
+
+      <p class="propina">
+        {{ form.decidir_propina_despues }} {{ form.decidir_propina_despues.label_tag }}
+      </p>
+    </div>
+
+    <!-- NOTAS ESPECIALES -->
+    <p class="textfield">
+      <label>Instrucciones especiales <span style="color: #28a745; font-size: 12px;">(Opcional)</span></label>
+      <small style="color: #666; font-size: 12px;">
+        Ej: "Sin cebolla", "Extra picante", "Llamar antes de subir", "Dejar en la puerta"
+      </small><br />
+      {{ form.notas }}
+    </p>
+
+    <!-- CHECKBOX PARA GUARDAR DATOS -->
+    <p style="margin-top: 15px; padding: 10px; background: #e8f4fd; border-radius: 5px;">
+      <input type="checkbox" id="guardar-datos-cliente" name="guardar_datos_cliente" checked>
+      <label for="guardar-datos-cliente">💾 Recordar estos datos para futuras compras</label>
+      <br><small style="color: #666;">Se guardará en tu navegador de forma segura</small>
+    </p>
+
+    <!-- MÉTODO DE PAGO -->
+    <label for="metodo_pago">Método de pago: <span style="color: red;">*</span></label>
+    <select name="metodo_pago" id="metodo_pago" required>
+        <option value="">-- Selecciona método de pago --</option>
+        {% for codigo, nombre in metodos_pago_disponibles %}
+            <option value="{{ codigo }}">{{ nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- RESUMEN TOTAL -->
+    <div id="resumen-total" style="margin-top: 20px;">
+      <h3>Resumen de pago</h3>
+      <p>Subtotal productos: <strong>$<span id="subtotal">{{ subtotal_productos }}</span> MXN</strong></p>
+      <p>Extras: <strong>$<span id="extras">{{ subtotal_extras }}</span> MXN</strong></p>
+      <p>Propina: <strong>$<span id="propina">0</span> MXN</strong></p>
+      <hr />
+      <p><strong>Total a pagar: $<span id="total-final">{{ subtotal_total }}</span> MXN</strong></p>
+      
+    </div>
+
+    <button type="submit" id="btn-submit">Confirmar Pedido</button>
+  </form>
+
+  <p><a href="{% url 'ver_carrito' %}" class="back-btn">Regresar</a></p>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const subtotal = parseFloat(document.getElementById('subtotal').textContent) || 0;
+    const extras = parseFloat(document.getElementById('extras').textContent) || 0;
+    const opcionEntrega = document.querySelector('select[name="opcion_entrega"]');
+    const propinaInput = document.querySelector('input[name="propina_voluntaria"]');
+    const decidirPropinaCheckbox = document.querySelector('input[name="decidir_propina_despues"]');
+    const totalFinalSpan = document.getElementById('total-final');
+    const propinaContainer = document.getElementById('propina-container');
+    const habitacionContainer = document.getElementById('habitacion-container');
+    
+    const nombreCompletoInput = document.querySelector('input[name="nombre_completo"]');
+    const telefonoInput = document.querySelector('input[name="telefono"]');
+    const habitacionInput = document.querySelector('input[name="numero_habitacion"]');
+
+    // NUEVOS: Elementos para caché de datos del cliente
+    const datosGuardadosPanel = document.getElementById('datos-guardados');
+    const listaDatosCliente = document.getElementById('lista-datos-cliente');
+    const nuevosDatosBtn = document.getElementById('nuevos-datos-btn');
+    const guardarDatosCheckbox = document.getElementById('guardar-datos-cliente');
+
+    // SISTEMA DE CACHÉ DE DATOS DEL CLIENTE
+    class ClienteCache {
+      constructor() {
+        this.storageKey = 'datos_cliente_hotel';
+      }
+
+      obtenerDatos() {
+        try {
+          const datos = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+          return datos;
+        } catch (error) {
+          console.error('Error al leer datos del cliente del caché:', error);
+          return [];
+        }
+      }
+
+      guardarDatos(datos) {
+        try {
+          const datosExistentes = this.obtenerDatos();
+          
+          const existeIndex = datosExistentes.findIndex(d => 
+            d.nombre_completo.toLowerCase() === datos.nombre_completo.toLowerCase() &&
+            d.telefono === datos.telefono
+          );
+
+          if (existeIndex >= 0) {
+            datosExistentes[existeIndex] = {
+              ...datos,
+              ultimoUso: new Date().toISOString(),
+              vecesUsado: (datosExistentes[existeIndex].vecesUsado || 0) + 1
+            };
+          } else {
+            datosExistentes.push({
+              ...datos,
+              id: Date.now(),
+              fechaCreacion: new Date().toISOString(),
+              ultimoUso: new Date().toISOString(),
+              vecesUsado: 1
+            });
+          }
+
+          datosExistentes.sort((a, b) => new Date(b.ultimoUso) - new Date(a.ultimoUso));
+          if (datosExistentes.length > 5) {
+            datosExistentes.splice(5);
+          }
+
+          localStorage.setItem(this.storageKey, JSON.stringify(datosExistentes));
+          return true;
+        } catch (error) {
+          console.error('Error al guardar datos del cliente:', error);
+          return false;
+        }
+      }
+
+      eliminarDatos(id) {
+        try {
+          const datos = this.obtenerDatos();
+          const datosFiltrados = datos.filter(d => d.id !== id);
+          localStorage.setItem(this.storageKey, JSON.stringify(datosFiltrados));
+          return true;
+        } catch (error) {
+          console.error('Error al eliminar datos del cliente:', error);
+          return false;
+        }
+      }
+    }
+
+    const clienteCache = new ClienteCache();
+
+    // CARGAR DATOS GUARDADOS DEL CLIENTE
+    function cargarDatosGuardados() {
+      const datos = clienteCache.obtenerDatos();
+      
+      if (datos.length === 0) {
+        datosGuardadosPanel.style.display = 'none';
+        return;
+      }
+
+      datosGuardadosPanel.style.display = 'block';
+      listaDatosCliente.innerHTML = '';
+
+      datos.forEach(dato => {
+        const div = document.createElement('div');
+        div.style.cssText = `
+          margin-bottom: 10px; 
+          padding: 12px; 
+          background: white; 
+          border: 1px solid #dee2e6; 
+          border-radius: 6px; 
+          cursor: pointer;
+          transition: all 0.2s;
+        `;
+
+        const habitacionTexto = dato.numero_habitacion ? `Hab. ${dato.numero_habitacion}` : 'Sin habitación';
+
+        div.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1;">
+              <strong>${dato.nombre_completo || 'Sin nombre'}</strong><br>
+              <span style="color: #495057;">📞 ${dato.telefono || 'Sin teléfono'}</span><br>
+              <span style="color: #6c757d; font-size: 14px;">
+                🏨 ${habitacionTexto}
+              </span><br>
+              <small style="color: #28a745;">
+                🕒 Usado ${dato.vecesUsado || 1} veces
+              </small>
+            </div>
+            <div style="display: flex; gap: 5px;">
+              <button type="button" onclick="usarDatosCliente(${dato.id})" 
+                      style="padding: 5px 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                ✓ Usar
+              </button>
+              <button type="button" onclick="eliminarDatosCliente(${dato.id})" 
+                      style="padding: 5px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                🗑️
+              </button>
+            </div>
+          </div>
+        `;
+
+        div.addEventListener('mouseenter', () => {
+          div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+          div.style.transform = 'translateY(-1px)';
+        });
+        div.addEventListener('mouseleave', () => {
+          div.style.boxShadow = 'none';
+          div.style.transform = 'none';
+        });
+
+        listaDatosCliente.appendChild(div);
+      });
+    }
+
+    // USAR DATOS GUARDADOS DEL CLIENTE
+    window.usarDatosCliente = function(id) {
+      const datos = clienteCache.obtenerDatos();
+      const dato = datos.find(d => d.id === id);
+      
+      if (!dato) return;
+
+      if (nombreCompletoInput) nombreCompletoInput.value = dato.nombre_completo || '';
+      if (telefonoInput) telefonoInput.value = dato.telefono || '';
+      if (habitacionInput) habitacionInput.value = dato.numero_habitacion || '';
+
+      // Si tiene habitación guardada, activar room service
+      if (dato.numero_habitacion && opcionEntrega.value !== 'roomservice') {
+        opcionEntrega.value = 'roomservice';
+        toggleHabitacionField();
+        // Asegurar que roomservice permita propina
+        if (decidirPropinaCheckbox) decidirPropinaCheckbox.checked = false;
+        togglePropinaField();
+      }
+
+      dato.ultimoUso = new Date().toISOString();
+      dato.vecesUsado = (dato.vecesUsado || 0) + 1;
+      clienteCache.guardarDatos(dato);
+
+      actualizarTotal();
+      
+      // Scroll hacia el campo de propina (si está visible)
+      setTimeout(() => {
+        if (propinaInput && propinaContainer && propinaContainer.style.display !== 'none') {
+          propinaInput.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+          
+          setTimeout(() => {
+            propinaInput.focus();
+            propinaInput.select();
+          }, 500);
+        }
+      }, 200);
+
+      mostrarToast('✅ Datos cargados correctamente', '#28a745');
+    };
+
+    // ELIMINAR DATOS GUARDADOS DEL CLIENTE
+    window.eliminarDatosCliente = function(id) {
+      if (confirm('¿Estás seguro de eliminar estos datos guardados?')) {
+        clienteCache.eliminarDatos(id);
+        cargarDatosGuardados();
+        mostrarToast('🗑️ Datos eliminados', '#dc3545');
+      }
+    };
+
+    // FUNCIÓN PARA MOSTRAR NOTIFICACIONES
+    function mostrarToast(mensaje, color) {
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 1000;
+        background: ${color}; color: white; padding: 12px 20px;
+        border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideIn 0.3s ease;
+      `;
+      toast.textContent = mensaje;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // AUTOCOMPLETAR DATOS DESDE CACHÉ
+    function autocompletarDesdeCsshe() {
+      const datos = clienteCache.obtenerDatos();
+      if (datos.length > 0) {
+        const datoReciente = datos[0];
+        
+        if (!nombreCompletoInput?.value && datoReciente.nombre_completo) {
+          nombreCompletoInput.value = datoReciente.nombre_completo;
+        }
+        if (!telefonoInput?.value && datoReciente.telefono) {
+          telefonoInput.value = datoReciente.telefono;
+        }
+      }
+    }
+
+    // BOTÓN NUEVOS DATOS
+    if (nuevosDatosBtn) {
+      nuevosDatosBtn.addEventListener('click', () => {
+        if (nombreCompletoInput) nombreCompletoInput.value = '';
+        if (telefonoInput) telefonoInput.value = '';
+        if (habitacionInput) habitacionInput.value = '';
+        
+        datosGuardadosPanel.style.display = 'none';
+        
+        if (nombreCompletoInput) nombreCompletoInput.focus();
+      });
+    }
+
+    function toggleHabitacionField() {
+      const isRoomService = opcionEntrega.value === 'roomservice';
+      if (habitacionContainer) {
+        habitacionContainer.style.display = isRoomService ? 'block' : 'none';
+        if (habitacionInput) {
+          habitacionInput.required = isRoomService;
+        }
+      }
+    }
+
+    // Importante: para "restaurante" siempre ocultar input de propina y marcar decidir después.
+    function togglePropinaField() {
+      const isRestaurante = opcionEntrega.value === 'restaurante';
+      if (isRestaurante) {
+        if (decidirPropinaCheckbox) decidirPropinaCheckbox.checked = true; // forzar decidir después
+        if (propinaContainer) propinaContainer.style.display = 'none';
+      } else {
+        // roomservice: respetar el checkbox
+        const isChecked = decidirPropinaCheckbox.checked;
+        if (propinaContainer) propinaContainer.style.display = isChecked ? 'none' : 'block';
+      }
+    }
+
+    function actualizarTotal() {
+      let total = subtotal + extras;
+
+      let propina = 0;
+      // Solo sumar propina si el campo está visible y el checkbox NO está marcado
+      if (opcionEntrega.value !== 'restaurante' && !decidirPropinaCheckbox.checked && propinaInput && propinaInput.value) {
+        propina = parseFloat(propinaInput.value) || 0;
+      }
+
+      total += propina;
+      totalFinalSpan.textContent = total.toFixed(2);
+      document.getElementById('propina').textContent = propina.toFixed(2);
+    }
+
+    // VALIDACIÓN DEL FORMULARIO
+    const form = document.getElementById('direccion-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const errores = [];
+        const isRoomService = opcionEntrega.value === 'roomservice';
+        
+        // VALIDAR CAMPOS OBLIGATORIOS
+        if (!nombreCompletoInput?.value?.trim()) {
+          errores.push('Nombre completo es obligatorio');
+        }
+        if (!telefonoInput?.value?.trim()) {
+          errores.push('Teléfono es obligatorio');
+        }
+        
+        // VALIDAR HABITACIÓN SI ES ROOM SERVICE
+        if (isRoomService && !habitacionInput?.value?.trim()) {
+          errores.push('Número de habitación es obligatorio para Room Service');
+        }
+
+        // VALIDAR PROPINA (solo si no decidirá después y no es restaurante)
+        if (opcionEntrega.value !== 'restaurante' && !decidirPropinaCheckbox?.checked) {
+          const propinaValue = propinaInput?.value?.trim();
+          if (propinaValue && propinaValue !== '') {
+            if (isNaN(parseFloat(propinaValue))) {
+              errores.push('Propina: Ingrese un monto válido');
+            } else {
+              const propinaMonto = parseFloat(propinaValue);
+              if (propinaMonto < 0) {
+                errores.push('Propina: El monto no puede ser negativo');
+              }
+            }
+          }
+        }
+
+        // VALIDAR MÉTODO DE PAGO
+        const metodoPago = document.getElementById('metodo_pago');
+        if (!metodoPago?.value) {
+          errores.push('Seleccione un método de pago');
+        }
+
+        // SI HAY ERRORES, MOSTRARLOS Y DETENER ENVÍO
+        if (errores.length > 0) {
+          e.preventDefault();
+          
+          const mensajeError = 'CAMPOS REQUERIDOS:\n\n' + 
+                            errores.map(error => `• ${error}`).join('\n') + 
+                            '\n\nPor favor complete todos los campos antes de continuar.';
+          
+          alert(mensajeError);
+          
+          // Enfocar el primer campo con error
+          if (!nombreCompletoInput?.value?.trim()) {
+            nombreCompletoInput?.focus();
+          } else if (!telefonoInput?.value?.trim()) {
+            telefonoInput?.focus();
+          } else if (isRoomService && !habitacionInput?.value?.trim()) {
+            habitacionInput?.focus();
+          } else if (opcionEntrega.value !== 'restaurante' && !decidirPropinaCheckbox?.checked && propinaInput?.value && isNaN(parseFloat(propinaInput.value))) {
+            propinaInput?.focus();
+          } else if (!metodoPago?.value) {
+            metodoPago?.focus();
+          }
+          
+          return false;
+        }
+
+        // GUARDAR DATOS DEL CLIENTE SI TODO ESTÁ CORRECTO
+        if (guardarDatosCheckbox && guardarDatosCheckbox.checked) {
+          const datosParaGuardar = {
+            nombre_completo: nombreCompletoInput?.value?.trim() || '',
+            telefono: telefonoInput?.value?.trim() || '',
+            numero_habitacion: habitacionInput?.value?.trim() || ''
+          };
+          
+          // Solo guardar si hay datos mínimos
+          if (datosParaGuardar.nombre_completo && datosParaGuardar.telefono) {
+            if (clienteCache.guardarDatos(datosParaGuardar)) {
+              console.log('✅ Datos del cliente guardados en caché');
+            } else {
+              console.warn('⚠️ No se pudieron guardar los datos del cliente');
+            }
+          }
+        }
+
+        const tipoServicio = isRoomService ? 'Room Service - Habitación ' + habitacionInput.value : 'Bajar al restaurante';
+        const confirmarPedido = confirm(
+          'CONFIRMAR PEDIDO\n\n' +
+          `Total a pagar: ${totalFinalSpan.textContent} MXN\n` +
+          `Servicio: ${tipoServicio}\n` +
+          `Pago: ${metodoPago.options[metodoPago.selectedIndex].text}\n\n` +
+          '¿Confirma que desea proceder con este pedido?'
+        );
+
+        if (!confirmarPedido) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    }
+
+    // EVENT LISTENERS PRINCIPALES
+    opcionEntrega.addEventListener('change', () => {
+      toggleHabitacionField();
+
+      // Reglas de propina según opción de entrega:
+      if (opcionEntrega.value === 'restaurante') {
+        if (decidirPropinaCheckbox) decidirPropinaCheckbox.checked = true;   // forzar decidir después
+      } else if (opcionEntrega.value === 'roomservice') {
+        if (decidirPropinaCheckbox) decidirPropinaCheckbox.checked = false;  // permitir ingresar propina
+      }
+
+      togglePropinaField();
+      actualizarTotal();
+    });
+    
+    if (decidirPropinaCheckbox) {
+      decidirPropinaCheckbox.addEventListener('change', () => {
+        togglePropinaField();
+        actualizarTotal();
+      });
+    }
+    
+    if (propinaInput) propinaInput.addEventListener('input', actualizarTotal);
+
+    // INICIALIZACIÓN
+    toggleHabitacionField();
+    togglePropinaField();
+    actualizarTotal();
+    
+    // Cargar datos guardados del cliente al iniciar
+    cargarDatosGuardados();
+    
+    // Autocompletar datos básicos al cargar
+    autocompletarDesdeCsshe();
+  });
+</script>
+</div>
+</body>
+</html>

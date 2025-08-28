@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    {%load static%}
+    <title>Seleccionar Subcategoría</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/estilos_crear_negocio.css'%}">
+    <style>
+        body{
+            max-width:600px;
+            width:100%;
+            
+            flex-direction:column;
+            margin:200px auto;
+            background:#F3F3E0;
+            justify-content:center;
+            align-items:center;
+        }
+        h3{width:95%
+            display:flex;
+            margin:auto;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:#00471b;
+        }
+        a, select{
+            font-size:20px;
+            color:green;
+        }
+        a{width:100px;
+            display:flex;
+            margin:auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h3>Seleccionar Subcategoría para el Producto</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="business_id" value="{{ business_id }}">
+        
+        <label for="subcategory">Subcategoría:</label>
+        <select name="subcategory" id="subcategory" required>
+            <option value="">-- Selecciona --</option>
+            {% for value, label in subcategories %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Continuar</button>
+    </form>
+    <a href="{%url 'dashboard'%}">Regresar</a>
+</body>
+</html>

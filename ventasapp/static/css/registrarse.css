@@ -1,0 +1,196 @@
+/* Reset some basic elements */
+body, h2, h3, form, p, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color:#00471b !important;
+}
+button{
+    color:#fff !important;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #00471b !important;
+    line-height: 1.6;
+    padding: 2rem;
+}
+
+.body {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    margin-top: 20px;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #00471b !important;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin: 1.5rem 0 0.75rem;
+    color: #00471b;
+}
+
+form p {
+    margin-bottom: 1.2rem;
+}
+
+
+
+form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #555;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fdfdfd;
+    transition: border-color 0.3s ease;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+    border-color: #00471b;
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: #00471b;
+    color: white;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 6px;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #08913c;
+}
+
+
+
+.extra-action-buttons{
+    max-width:700px;
+    width:100%;
+    display:flex;
+    margin:auto;
+    height:40px;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.extra-action-buttons  a , .extra-action-buttons button {
+    margin-left:  20px;
+    max-width:100px;
+    height: 30px !important;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+ .extra-action-buttons button{
+    margin-top: 0;
+    background-color: red;
+ }
+
+.regresar-dashboard{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+ .btn-regresar-a-extras {
+  background-color: #6c757d !important;
+  color: white !important;
+  padding: 10px 16px !important;
+  border-radius: 5px !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  user-select: none !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.btn-regresar-navegador:hover {
+  background-color: #5a6268 !important;
+}
+
+
+
+
+@media screen and (max-width:768px){
+    h2, p {
+        font-size: 15px;
+        
+        width:100%;
+        
+    }
+    body, .body{
+        padding:0;
+        margin: 0;
+    }
+    .body{
+       
+     
+        width:95%;
+        box-shadow: none;
+        margin:20px auto;
+    }
+    .regresar-dashboard{
+        padding:0;
+        margin:0;
+        width:150px;
+        height:40px;
+        font-size: 10px;
+        display:flex;
+        margin: 12px auto;
+       
+        width:96%;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-regresar-dashboard {
+       
+        font-size: 12px;
+        
+    }
+    .btn-regresar-a-extras{
+        background: transparent !important;
+        color:#00471b !important;
+    }
+}
